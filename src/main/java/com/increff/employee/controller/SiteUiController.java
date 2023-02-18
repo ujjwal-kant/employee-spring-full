@@ -33,4 +33,9 @@ public class SiteUiController extends AbstractUiController {
 		return mav("features.html");
 	}
 
+	@RequestMapping(value = "/site/signup")
+	public ModelAndView signup() {
+		return mav("signup.html");
+	}
+
 }

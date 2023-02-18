@@ -21,3 +21,10 @@ body {
 .fas{
     font-size: 4rem;
 }
+
+.bottom_aligner {
+    display: inline-block;
+    height: 100%;
+    vertical-align: bottom;
+    width: 0px;
+}

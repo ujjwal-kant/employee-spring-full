@@ -13,6 +13,11 @@ import org.thymeleaf.spring4.view.ThymeleafViewResolver;
 import org.thymeleaf.templatemode.TemplateMode;
 import org.thymeleaf.templateresolver.ITemplateResolver;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+// import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+
+// import com.fasterxml.jackson.databind.ObjectMapper;
+
 import springfox.documentation.builders.PathSelectors;
 import springfox.documentation.builders.RequestHandlerSelectors;
 import springfox.documentation.spi.DocumentationType;
@@ -80,14 +85,14 @@ public class ControllerConfig extends WebMvcConfigurerAdapter {
 		return resolver;
 	}
 	
-//	@Bean
-//	public ObjectMapper objectMapper() {
-//        	JavaTimeModule javaTimeModule = new JavaTimeModule();
-//        	javaTimeModule.addSerializer(ZonedDateTime.class,
-//                	new ZonedDateTimeSerializer(DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSSXXX")));
-//        	return Jackson2ObjectMapperBuilder.json().featuresToDisable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS) // ISODate
-//                	.modules(javaTimeModule).build();
-//    	}
+	// @Bean
+	// public ObjectMapper objectMapper() {
+    //    	JavaTimeModule javaTimeModule = new JavaTimeModule();
+    //    	javaTimeModule.addSerializer(ZonedDateTime.class,
+    //            	new ZonedDateTimeSerializer(DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSSXXX")));
+    //    	return Jackson2ObjectMapperBuilder.json().featuresToDisable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS) // ISODate
+    //            	.modules(javaTimeModule).build();
+   	// }
 
 
 }

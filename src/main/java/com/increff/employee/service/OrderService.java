@@ -1,105 +1,55 @@
+
 package com.increff.employee.service;
 
+import java.sql.Date;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
+
+import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.increff.employee.dao.InventoryDao;
 import com.increff.employee.dao.OrderDao;
-import com.increff.employee.dao.ProductDao;
-import com.increff.employee.model.OrderData;
-import com.increff.employee.model.OrderItemData;
 import com.increff.employee.model.OrderItemForm;
-import com.increff.employee.pojo.OrderItemPojo;
 import com.increff.employee.pojo.OrderPojo;
+
 
 @Service
 public class OrderService {
 
     @Autowired
-    private OrderDao orderdao;
-    @Autowired
-    private ProductDao productdao;
-    @Autowired
-    private InventoryDao inventorydao;
+    private OrderDao dao;
 
-    public void add(List<OrderItemForm> orderItemforms) throws ApiException {
-        for(OrderItemForm orderitem: orderItemforms)
-        {
-            OrderItemPojo p=convert(orderitem);
-            orderdao.insert(p);
-        }
+    @Transactional(rollbackOn = ApiException.class)
+    public OrderPojo createNewOrder() {
+        OrderPojo orderPojo = new OrderPojo();
+        return dao.insert(orderPojo);
     }
 
-	public Boolean checkquantity(List<OrderItemForm> orderItemforms) {
-        for(OrderItemForm orderitem: orderItemforms)
-        {
-            int QuantityPresentInInventory=inventorydao.selectByBarcode(orderitem.getBarcode()).getQuantity();
-            // System.out.println(QuantityPresentInInventory+" "+orderitem.getQuantity())
-            if(QuantityPresentInInventory<orderitem.getQuantity())
-            return false;
+    @Transactional
+    public OrderPojo getById(Integer id) throws ApiException {
+        OrderPojo orderPojo = dao.getById(id);
+        if (orderPojo == null) {
+            throw new ApiException("Order with given id not found");
         }
-        return true;
-	}
-
-	public void updateInventory(List<OrderItemForm> orderItemforms) {
-        for(OrderItemForm orderitem: orderItemforms)
-        {
-            int QuantityPresentInInventory=inventorydao.selectByBarcode(orderitem.getBarcode()).getQuantity();
-            inventorydao.selectByBarcode(orderitem.getBarcode()).setQuantity(QuantityPresentInInventory-orderitem.getQuantity());
-        }
-	}
-
-    public void undochangetoInventory(int id) {
+        return orderPojo;
     }
-
-    public  OrderItemData convert(OrderItemPojo p) throws ApiException {
-		OrderItemData d = new OrderItemData();
-        d.setOrder_id(p.getOrderId());
-		d.setId(p.getId());
-        d.setQuantity(p.getQuantity());
-        d.setMrp(p.getSellingPrice());
-        d.setBarcode(productdao.GetBarcodeFromProductID(p));
-		return d;
-	}
-
-	private  OrderItemPojo convert(OrderItemForm f) throws ApiException {
-		OrderItemPojo p = new OrderItemPojo();
-        p.setQuantity(f.getQuantity());
-        p.setSellingPrice(f.getMrp());
-        p.setProductId(productdao.GetProductIDFromBarcode(f));
-        return p;
-	}
 
     public List<OrderPojo> getAll() {
-        return orderdao.getAll();
+        return dao.getAll();
     }
 
-    public OrderItemData convertOrderItemPojoToOrderItemData(OrderItemPojo orderitempojo, String barcode) {
-        OrderItemData d = new OrderItemData();
-        d.setOrder_id(orderitempojo.getOrderId());
-		d.setId(orderitempojo.getId());
-        d.setQuantity(orderitempojo.getQuantity());
-        d.setMrp(orderitempojo.getSellingPrice());
-        d.setBarcode(barcode);
-        d.setProduct_id(orderitempojo.getProductId());
-		return d;
+    public List<OrderPojo> getAllBetween(java.util.Date yesterday, java.util.Date date) {
+        java.sql.Date startingDate1 = new java.sql.Date(yesterday.getTime());
+        java.sql.Date endingDate1 = new java.sql.Date(date.getTime());
+        return dao.selectAllBetween(startingDate1, endingDate1);
     }
 
-    public OrderData convertOrderPojoToOrderData(OrderPojo pojo, List<OrderItemData> orderItemData) {
-        OrderData d=new OrderData();
-        d.setId(pojo.getId());
-        d.setCreatedAt(pojo.getDatetime());
-        d.setOrders(orderItemData);
-        d.setTotalAmount(0);
-        return d;
+    @Transactional(rollbackOn = ApiException.class)
+    public void setInvoiceDownloaded(Integer id) throws ApiException {
+        OrderPojo orderPojo = getById(id);
+        orderPojo.setIsInvoiceCreated(true);
     }
-
-    public OrderPojo getById(int id) {
-        return orderdao.getById(id);
-    }
-
-   
-    
 }

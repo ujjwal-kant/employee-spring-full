@@ -1,7 +1,6 @@
 package com.increff.employee.controller;
 
 import java.util.ArrayList;
-import java.util.Objects;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -12,11 +11,13 @@ import org.springframework.http.MediaType;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.increff.employee.dto.AdminDto;
 import com.increff.employee.model.InfoData;
 import com.increff.employee.model.LoginForm;
 import com.increff.employee.pojo.UserPojo;
@@ -34,16 +35,26 @@ public class LoginController {
 	private UserService service;
 	@Autowired
 	private InfoData info;
+	@Autowired
+    private AdminDto dto;
+
+	private boolean checkPass(String plainPassword, String hashedPassword) {
+		if (BCrypt.checkpw(plainPassword, hashedPassword))
+		     return true;
+		else
+			return false;
+	}
 	
 	@ApiOperation(value = "Logs in a user")
 	@RequestMapping(path = "/session/login", method = RequestMethod.POST, consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE)
 	public ModelAndView login(HttpServletRequest req, LoginForm f) throws ApiException {
 		UserPojo p = service.get(f.getEmail());
-		boolean authenticated = (p != null && Objects.equals(p.getPassword(), f.getPassword()));
+		boolean authenticated = (p != null && checkPass(f.getPassword(),p.getPassword()));
 		if (!authenticated) {
 			info.setMessage("Invalid username or password");
 			return new ModelAndView("redirect:/site/login");
 		}
+		// info.setRole("operator");
 
 		// Create authentication object
 		Authentication authentication = convert(p);
@@ -54,7 +65,7 @@ public class LoginController {
 		// Attach Authentication object to the Security Context
 		SecurityUtil.setAuthentication(authentication);
 
-		return new ModelAndView("redirect:/ui/home");
+		return new ModelAndView("redirect:/ui/order");
 
 	}
 
@@ -69,6 +80,7 @@ public class LoginController {
 		UserPrincipal principal = new UserPrincipal();
 		principal.setEmail(p.getEmail());
 		principal.setId(p.getId());
+		principal.setRole(p.getRole());
 
 		// Create Authorities
 		ArrayList<SimpleGrantedAuthority> authorities = new ArrayList<SimpleGrantedAuthority>();
@@ -76,9 +88,9 @@ public class LoginController {
 		// you can add more roles if required
 
 		// Create Authentication
-		UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(principal, null,
-				authorities);
+		UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(principal, null, authorities);
 		return token;
 	}
 
+	
 }

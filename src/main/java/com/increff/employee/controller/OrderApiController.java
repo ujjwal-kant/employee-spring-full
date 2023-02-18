@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.increff.employee.dto.OrderDto;
 import com.increff.employee.model.OrderData;
+import com.increff.employee.model.OrderDetailData;
 import com.increff.employee.model.OrderItemForm;
 import com.increff.employee.service.ApiException;
 
@@ -19,35 +20,47 @@ import io.swagger.annotations.ApiOperation;
 
 @Api
 @RestController
+@RequestMapping("/api/order")
 public class OrderApiController{
 
     @Autowired
     private OrderDto orderdto;
 
     @ApiOperation(value="Create an Order")
-    @RequestMapping(path="/api/order",method= RequestMethod.POST)
-    public void add(@RequestBody List<OrderItemForm> OrderItemforms) throws ApiException{
-        //update inventory and check inventory
-        orderdto.add(OrderItemforms);
+    @RequestMapping(path="",method= RequestMethod.POST)
+    public OrderDetailData add(@RequestBody List<OrderItemForm> OrderItemforms) throws ApiException{
+        return orderdto.addOrder(OrderItemforms);
     }
 
     @ApiOperation(value = "Get all orders")
-    @RequestMapping(path = "/api/order", method = RequestMethod.GET)
+    @RequestMapping(path = "", method = RequestMethod.GET)
     public List<OrderData> getAll() throws ApiException {
         return orderdto.getAllOrders();
     }
 
     @ApiOperation(value = "Get order by id")
-    @RequestMapping(path = "/api/order/{id}", method = RequestMethod.GET)
-    public OrderData getOrderDetails(@PathVariable int id) throws ApiException {
+    @RequestMapping(path = "/{id}", method = RequestMethod.GET)
+    public OrderDetailData getOrderDetails(@PathVariable Integer id) throws ApiException {
         return orderdto.getOrderDetails(id);
     }
 
     @ApiOperation(value = "Update order by id")
-    @RequestMapping(path = "/api/order/{id}", method = RequestMethod.PUT)
-    public void update(@PathVariable int id, @RequestBody List<OrderItemForm> orderItems) throws ApiException {
+    @RequestMapping(path = "/{id}", method = RequestMethod.PUT)
+    public void update(@PathVariable Integer id, @RequestBody List<OrderItemForm> orderItems) throws ApiException {
         orderdto.updateOrder(id, orderItems);
     }
+
+    // @ApiOperation(value = "Gets all order items of an order")
+    // @RequestMapping(path = "/{id}/items", method = RequestMethod.GET)
+    // public List<OrderItemData> getOrderItems(@PathVariable Integer id) throws ApiException {
+    //     return orderdto.getOrderItems(id);
+    // }
+
+    // @ApiOperation(value = "Generate an Invoice")
+    // @RequestMapping(path = "/invoice/{id}", method = RequestMethod.GET)
+    // public String generateInvoice(@PathVariable Integer id) throws ApiException {
+    //     return orderdto.generateInvoice(id);
+    // }
 
     
 }

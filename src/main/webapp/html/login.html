@@ -29,10 +29,14 @@
 			<div class="form-group">
 			    <label for="password" class="col-sm-10 col-form-label">Password</label>
 			    <div class="col-sm-10">
-			      <input type="text" class="form-control" name="password" id="password" placeholder="password">
+			      <input type="password" class="form-control" name="password" id="password" placeholder="password">
+				  <input type="checkbox" onclick="showPassword()">Show Password
 			    </div>
 			</div>
-			<button type="submit" class="btn btn-primary" id="login">Go</button>
+			
+			<div class="container"> 
+			  <button type="submit" class="btn btn-primary" id="login">Login</button>
+			</div>
 		</form>
 	</div>
 	<div class="card-footer text-danger">
@@ -49,6 +53,8 @@
 </div> <!-- Container-->
 
 <footer th:replace="snippets.html :: name_footer"></footer>
+
+<script th:src="@{/static/brand.js}"/></script>
 
 </body>
 

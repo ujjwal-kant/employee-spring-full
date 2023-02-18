@@ -15,9 +15,9 @@ import com.increff.employee.pojo.EmployeePojo;
 @Repository
 public class EmployeeDao extends AbstractDao {
 
-	private static String delete_id = "delete from EmployeePojo p where id=:id";
-	private static String select_id = "select p from EmployeePojo p where id=:id";
-	private static String select_all = "select p from EmployeePojo p";
+	private static String DELETE_ID = "delete from EmployeePojo p where id=:id";
+	private static String SELECT_ID = "select p from EmployeePojo p where id=:id";
+	private static String SELECT_ALL = "select p from EmployeePojo p";
 
 	@PersistenceContext
 	private EntityManager em;
@@ -28,19 +28,19 @@ public class EmployeeDao extends AbstractDao {
 	}
 
 	public int delete(int id) {
-		Query query = em.createQuery(delete_id);
+		Query query = em.createQuery(DELETE_ID);
 		query.setParameter("id", id);
 		return query.executeUpdate();
 	}
 
 	public EmployeePojo select(int id) {
-		TypedQuery<EmployeePojo> query = getQuery(select_id, EmployeePojo.class);
+		TypedQuery<EmployeePojo> query = getQuery(SELECT_ID, EmployeePojo.class);
 		query.setParameter("id", id);
 		return getSingle(query);
 	}
 
 	public List<EmployeePojo> selectAll() {
-		TypedQuery<EmployeePojo> query = getQuery(select_all, EmployeePojo.class);
+		TypedQuery<EmployeePojo> query = getQuery(SELECT_ALL, EmployeePojo.class);
 		return query.getResultList();
 	}
 

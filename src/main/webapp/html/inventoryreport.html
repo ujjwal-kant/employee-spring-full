@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+<head th:replace="snippets.html :: name_head"></head>
+<body>
+  <nav th:replace="snippets.html :: name_app_navbar"></nav>
+  
+  <div class="container mt-4">
+
+<div class="row" style="margin-bottom:40px;">
+    <div><h3>Inventory Report</h3></div>
+    <div style=" padding-left: 779px;"><button type="button" class="btn btn-outline-primary" id="csv">Download CSV</button></div>
+</div>
+
+<div class="row">
+ <div class="col-12">
+  <table class="table table-bordered table-striped" id="inventoryreport-table">
+    <thead class=" text-center thead-dark">
+      <tr class="text-center">
+        <th scope="col">Brand</th>
+        <th scope="col">Category</th>
+        <th scope="col">Quantity</th>
+      </tr>
+    </thead>
+
+    <tbody class="text-center">
+    </tbody>
+  </table>
+ </div>
+</div>
+
+</div>
+<footer th:replace="snippets.html :: name_footer"></footer>
+<script th:src="@{/static/inventoryreport.js}"/></script>
+
+</body>
+</html>

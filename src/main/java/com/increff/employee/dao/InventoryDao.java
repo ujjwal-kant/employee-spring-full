@@ -4,7 +4,6 @@ import java.util.List;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 import javax.transaction.Transactional;
 
@@ -16,52 +15,39 @@ import com.increff.employee.pojo.InventoryPojo;
 @Repository
 public class InventoryDao extends AbstractDao {
 
-	private static String delete_id = "delete from InventoryPojo p where id=:id";
-	private static String select_id = "select p from InventoryPojo p where id=:id";
-	private static String select_all = "select p from InventoryPojo p";
-
-	private static String searchByBarcode = "select p from InventoryPojo p where barcode=:barcode";
+	
+    private String SELECT_ALL = "select i from InventoryPojo i";
+    private String SELECT_PRODUCTID= "select i from InventoryPojo i where productId=:productId";
+	// private String SELECT_BY_BARCODE= "select i from InventoryPojo i where barcode=:barcode";
 
 	@PersistenceContext
 	private EntityManager em;
 
 	@Transactional
-	public void insert(InventoryPojo p) {
-		TypedQuery<InventoryPojo> query = getQuery(searchByBarcode, InventoryPojo.class);
-		query.setParameter("barcode",p.getBarcode());
-		
-		// if(query==null)
-		em.persist(p);
-		
-	}
-
-	public int delete(int id) {
-		Query query = (Query) em.createQuery(delete_id);
-		query.setParameter("id", id);
-		return query.executeUpdate();
-	}
-
-	public InventoryPojo select(int id) {
-		TypedQuery<InventoryPojo> query = getQuery(select_id, InventoryPojo.class);
-		query.setParameter("id", id);
-		return getSingle(query);
-	}
+    public void insert(InventoryPojo inventoryPojo) {
+        em.persist(inventoryPojo);
+    }
 
 	public List<InventoryPojo> selectAll() {
-		TypedQuery<InventoryPojo> query = getQuery(select_all, InventoryPojo.class);
+		TypedQuery<InventoryPojo> query = getQuery(SELECT_ALL, InventoryPojo.class);
 		return query.getResultList();
 	}
 
-	public InventoryPojo selectByBarcode(String Barcode)
-	{
-		TypedQuery<InventoryPojo> query = getQuery(searchByBarcode, InventoryPojo.class);
-		query.setParameter("barcode", Barcode);
-		return getSingle(query);
-	}
+	public InventoryPojo selectByProductId(Integer productId) {
+        TypedQuery<InventoryPojo> query = getQuery(SELECT_PRODUCTID, InventoryPojo.class);
+        query.setParameter("productId", productId);
+        return getSingle(query);
+    }
+
+
+	// public InventoryPojo selectByBarcode(String Barcode) {
+    //     TypedQuery<InventoryPojo> query = getQuery(SELECT_BY_BARCODE, InventoryPojo.class);
+    //     query.setParameter(0, Barcode);
+    //     return getSingle(query);
+    // }
 
 	public void update(InventoryPojo p) {
+		// em.merge(p);
 	}
-
-
 
 }

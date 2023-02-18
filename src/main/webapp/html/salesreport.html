@@ -1,0 +1,95 @@
+<!doctype html>
+
+<html lang="en">
+
+<head th:replace="snippets.html :: name_head"></head>
+
+<body>
+
+<nav th:replace="snippets.html :: name_app_navbar"></nav>
+
+<div class="container mt-4">
+
+    <h3>Sales Report</h3>
+
+    <!-- Top row with form-->
+    <div class="container mt-5">
+        <form id="sales-form">
+            <div class="row justify-content-between">
+                <div class=" col-5 form-group row">
+                    <label for="inputBrand" class="col-form-label col-3">Brand</label>
+                    <div class="col-sm-9">
+                        <select name="brand" class="form-control form-control-md" aria-label=".form-select-sm example" id="inputBrand" style="width: 100%">
+                            <option selected="" value="">Select Brand</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="col-5 form-group row">
+                    <label for="inputCategory" class="col-form-label col-3">Category</label>
+                    <div class="col-sm-9">
+                        <select name="category" class="form-control form-control-md" aria-label=".form-select-sm example" id="inputCategory" style="width: 100%">
+                            <option selected="" value="">Select Category</option>
+                        </select>
+                    </div>
+                </div>
+
+
+                <div class="col-5 form-group row">
+                    <label for="inputStartDate" class="col-form-label col-3">Start date</label>
+                    <div class="col-sm-9">
+                        <input type="date" class="form-control" name="startDate" id="inputStartDate">
+                    </div>
+                </div>
+                <div class="col-5 form-group row">
+                    <label for="inputEndDate" class="col-form-label col-3">End date</label>
+                    <div class="col-sm-9">
+                        <input type="date" class="form-control" name="endDate" id="inputEndDate">
+                    </div>
+                </div>
+
+
+            </div>
+            <div class="row">
+                <div class="form-group col-md-4">
+                <button type="button" class="btn btn-dark" id="filter-sales-report">Generate Report</button>
+                </div>
+                <div class="form-group d-flex  justify-content-end col-md-2 ml-auto">
+                    <button type="button" class="btn btn-outline-primary" id="csv">Download CSV</button>
+                </div>
+            </div>
+        </form>
+    </div>
+
+
+    <!-- Blank Row -->
+    <div class="row">
+        &nbsp;
+    </div>
+    <div class="row">
+
+        <!-- Table -->
+        <div class="col-12">
+            <table class="table table-bordered table-striped css-serial text-center" id="sales-table" style="display: none;">
+                <thead class="thead-dark" >
+                <tr>
+                    <th scope="col">Sr. No</th>
+                    <th scope="col">Brand</th>
+                    <th scope="col">Category</th>
+                    <th scope="col">Quantity</th>
+                    <th scope="col">Revenue</th>
+                </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+
+        </div>
+    </div>
+</div>
+
+<footer th:replace="snippets.html :: name_footer"></footer>
+
+<script th:src="@{/static/salesreport.js}"/></script>
+
+</body>
+
+</html>

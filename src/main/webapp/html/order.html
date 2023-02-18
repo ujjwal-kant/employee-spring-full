@@ -6,20 +6,238 @@
 
 <body>
 
-<nav th:replace="snippets.html :: name_site_navbar"></nav>
+<nav th:replace="snippets.html :: name_app_navbar"></nav>
 
+<div class="container mt-4">
 
-<div class="container">
-
-<h3>Order</h3>
-
+<!-- <h3>Orders</h3> -->
 <div class="row">
-	
+	<h1 class="col my-auto">Orders</h1>
+	<div class="col d-flex justify-content-end">
+		<button type="button" class="btn btn-dark" id="add-order-button">Create an Order</button>
+		<!-- <button type="button" class="btn btn-success px-4 m-2 shadow" id="add-order-button" th:if="${info.getRole() == 'supervisor'}">Add</button> -->
+	</div>
+</div>
 
+<!-- Orders Add Modal -->
+<div class="modal" tabindex="-1" role="dialog" id="add-order-modal">
+	<div class="modal-dialog modal-xl" role="document">
+	  <div class="modal-content">
+		<div class="modal-header">
+		  <h5 class="modal-title">Add Order</h5>
+		  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+			<span aria-hidden="true">&times;</span>
+		  </button>
+		</div>
+        <div class="modal-body">
+            <form class="container row justify-content-around" id="order-item-form">
+                <div class="col form-group">
+					<label for="inputBarcode" class="col-form-label">Barcode</label>
+					<div class="">
+<!--					<input type="text" class="form-control" name="barcode" id="inputBarcode" val="" placeholder=" Enter barcode" required />-->
+						<select class="form-control" name="barcode" required="required" id="inputBarcode"></select>
+					</div>
+				</div>
+                <div class="col form-group">
+					<label for="inputQuantity" class="col-form-label">Quantity</label>
+					<div class="">
+					<input type="number" class="form-control" min="1" name="quantity" id="inputQuantity" val="" placeholder="Enter quantity" required />
+					</div>
+				</div>
+                <div class="col form-group">
+					<label for="inputSellingPrice" class="col-form-label">Selling Price</label>
+					<div class="">
+					<input type="number" class="form-control" name="sellingPrice" min="0" step="0.01" id="inputSellingPrice" val="" placeholder="Enter selling price" required />
+					</div>
+				</div>
+                <div class="align-self-center mt-3 pt-1">
+                    <button type="submit" class="btn btn-primary px-4 m-2 shadow" id="add-order-item">Add</button>
+                </div>
+            </form>
+            <div class="row justify-content-center mt-3">
+                <h3>Order Items</h3>
+            </div>
+            <div class="row">
+                <div class="col-12">
+                    <table class="table table-striped css-serial" id="order-item-table">
+                        <thead>
+                          <tr>
+                            <th class="text-center" scope="col">S. No</th>
+                            <th class="text-center" scope="col">Barcode</th>
+                            <th class="text-center" scope="col">Quantity</th>
+                            <th class="text-center" scope="col">Selling Price</th>
+                            <th class="text-center" scope="col">Actions</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                  
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer">
+			<div class="d-flex justify-content-start mr-4">
+				<h4>TotalAmount:</h4>
+				&nbsp;
+				<h4 class="font-weight-bold" id="add-grand-total">0.00</h4>
+			</div>
+            <button type="button" class="btn btn-success px-4 m-2 shadow" id="add-order">Place Order</button>
+        </div>
+	  </div>
+	</div>
+  </div>
+
+<!-- Blank Row -->
+<div class="row">
+	&nbsp;
+</div>
+<div class="row">
+
+ <!-- Table -->
+ <div class="col-12">
+	<table class="table table-bordered table-striped" id="order-table">
+	  <thead class="thead-dark">
+	    <tr>
+	      <th class="text-center" scope="col">S. No</th>
+	      <th class="text-center" scope="col">Order Time</th>
+		  <th class="text-center" scope="col">Total Amount</th>
+		  <th class="text-center" scope="col">Actions</th>
+	    </tr>
+	  </thead>
+	  <tbody class="text-center">
+
+	  </tbody>
+	</table>
 </div>
 </div>
+
+<!-- Order Details Modal -->
+<div class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" id="order-details-modal">
+	<div class="modal-dialog modal-lg" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title">Order Details</h5>
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+					<span aria-hidden="true">&times;</span>
+				</button>
+			</div>
+			<div class="modal-body">
+				<!-- Display Order Id and Order Date -->
+				<div class="d-flex justify-content-between">
+					<div>
+						<strong>Order ID:</strong>
+						<p id="order-id"></p>
+					</div>
+					<!-- <div>
+						<strong>Order Time:</strong>
+						<p id="order-date"></p>
+					</div> -->
+				</div>
+				<div class="d-flex justify-content-center">
+					<h4>Order Items</h4>
+				</div>
+				<table class="table table-bordered table-striped" id="order-items-table">
+					<thead class="thead-dark">
+						<tr>
+							<th class="text-center" scope="col">S.No</th>
+							<th class="text-center" scope="col">Product Name</th>
+							<th class="text-center" scope="col">Quantity</th>
+							<th class="text-center" scope="col">Selling Price</th>
+							<th class="text-center" scope="col">Total Price</th>
+						</tr>
+					</thead>
+					<tbody class="text-center">
+
+					</tbody>
+				</table>
+				<div class="row justify-content-end mr-5">
+					<h5 class="font-weight-bold">TotalAmount: </h5>
+					&nbsp;
+					<h5 id="grand-total"></h5>
+				</div>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-dark" data-dismiss="modal">Close</button>
+			</div>
+		</div>
+	</div>
+</div>
+
+<!-- Order Edit Modal -->
+<div class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" id="order-edit-modal">
+	<div class="modal-dialog modal-xl" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title">Edit Order</h5>
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+					<span aria-hidden="true">&times;</span>
+				</button>
+			</div>
+			<div class="modal-body">
+				<form class="container row justify-content-around" id="edit-order-item-form">
+					<div class="col form-group">
+						<label for="inputEditBarcode" class="col-form-label">Barcode</label>
+						<div class="">
+<!--							<input type="text" class="form-control" name="barcode" id="inputEditBarcode" val="" placeholder="Enter barcode" required />-->
+							<select class="form-control" name="barcode" required="required" id="inputEditBarcode"></select>
+						</div>
+					</div>
+					<div class="col form-group">
+						<label for="inputEditQuantity" class="col-form-label">Quantity</label>
+						<div class="">
+							<input type="number" min="1" class="form-control" name="quantity" id="inputEditQuantity" val="" placeholder="Enter quantity" required />
+						</div>
+					</div>
+					<div class="col form-group">
+						<label for="inputEditSellingPrice" class="col-form-label">Selling Price</label>
+						<div class="">
+							<input type="number" class="form-control" name="sellingPrice" min="0" step="0.01" id="inputEditSellingPrice" val="" placeholder="Enter selling price" required />
+						</div>
+					</div>
+					<div class="align-self-center mt-3 pt-1">
+						<button type="button" class="btn btn-dark" id="add-edit-order-item">Add</button>
+					</div>
+				</form>
+				<div class="row justify-content-center mt-3">
+					<h3>Order Items</h3>
+				</div>
+				<table class="table table-bordered table-striped" id="edit-order-items-table">
+					<thead>
+					<tr>
+						<th class="text-center" scope="col">S. No</th>
+						<th class="text-center" scope="col">Barcode</th>
+						<th class="text-center" scope="col">Quantity</th>
+						<th class="text-center" scope="col">Selling Price</th>
+						<th class="text-center" scope="col">Action</th>
+					</tr>
+					</thead>
+					<tbody>
+
+					</tbody>
+				</table>
+			</div>
+			<input type="hidden" name="id">
+			<div class="modal-footer">
+				<div class="d-flex justify-content-start mr-4">
+					<h4>TotalAmount:</h4>
+					&nbsp;
+					<h4 class="font-weight-bold" id="edit-grand-total">0.00</h4>
+				</div>
+				<button type="button" class="btn btn-dark" data-dismiss="modal">Close</button>
+				<button type="button" class="btn btn-dark" id="update-order">Update Order</button>
+			</div>
+		</div>
+	</div>
+</div>
+
+
+</div> <!-- Container end-->
 
 <footer th:replace="snippets.html :: name_footer"></footer>
+
+<script th:src="@{/static/app.js}"/></script>
+<script th:src="@{/static/order.js}"/></script>
 
 </body>	
 

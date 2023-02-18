@@ -14,6 +14,7 @@ public class InfoData implements Serializable {
 
 	private String message;
 	private String email;
+	private String role;
 
 	public InfoData() {
 		message = "No message";
@@ -30,6 +31,14 @@ public class InfoData implements Serializable {
 
 	public String getEmail() {
 		return email;
+	}
+
+	public String getRole() {
+		return role;
+	}
+
+	public void setRole(String role) {
+		this.role = role;
 	}
 
 	public void setEmail(String email) {
