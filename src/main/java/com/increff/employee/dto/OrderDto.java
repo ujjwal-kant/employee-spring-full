@@ -1,9 +1,6 @@
 package com.increff.employee.dto;
 
-import java.io.File;
-import java.io.FileOutputStream;
 import java.util.ArrayList;
-import java.util.Base64;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -43,8 +40,9 @@ public class OrderDto {
 
     @Transactional(rollbackOn = ApiException.class)
     public OrderDetailData addOrder(List<OrderItemForm> orderItemForms) throws ApiException {
-        ValidateUtil.validateOrderForm(orderItemForms);
         NormaliseUtil.normalizeOrderItem(orderItemForms);
+        ValidateUtil.validateOrderForm(orderItemForms);
+        
         checkForRedundancyInOrderItemForms(orderItemForms);
         OrderPojo orderPojo = orderService.createNewOrder();
         List<OrderItemPojo> orderItemPojoList = new ArrayList<OrderItemPojo>();
@@ -95,7 +93,7 @@ public class OrderDto {
     }
 
     @Transactional(rollbackOn = ApiException.class)
-    public List<OrderItemPojo> updateOrder(Integer orderId, List<OrderItemForm> orderItemForms) throws ApiException {
+    public void updateOrder(Integer orderId, List<OrderItemForm> orderItemForms) throws ApiException {
         ValidateUtil.validateOrderForm(orderItemForms);
         NormaliseUtil.normalizeOrderItem(orderItemForms);
         revertInventory(orderId);
@@ -106,7 +104,7 @@ public class OrderDto {
         List<OrderItemPojo> orderItemPojolist = new ArrayList<>();
         List<OrderItemData> orderItemDataList = new ArrayList<>();
         updateInventory(orderPojo.getId(), orderItemForms, orderItemPojolist, orderItemDataList);
-        return orderItemPojolist;
+        // return orderItemPojolist;
     }
 
     @Transactional(rollbackOn = ApiException.class)

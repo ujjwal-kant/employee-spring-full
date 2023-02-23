@@ -46,7 +46,7 @@ public class InventoryDto {
         ProductPojo productPojo = productService.getByBarcode(inventoryForm.getBarcode());
         InventoryPojo inventoryPojo = ConversionUtil.getInventoryPojo(inventoryForm, productPojo.getId());
 		Integer productId=productPojo.getId();
-		InventoryPojo old = inventoryService.selectByProductId(productId);
+		InventoryPojo old = inventoryService.getByProductId(productId);
         old.setQuantity(inventoryPojo.getQuantity());
         inventoryService.update(old);
 		return ConversionUtil.getInventoryData(old,productPojo.getName(), productPojo.getBarcode());
@@ -61,7 +61,7 @@ public class InventoryDto {
         ProductPojo productPojo = productService.getByBarcode(inventoryForm.getBarcode());
         InventoryPojo inventoryPojo = inventoryService.getByProductId(productPojo.getId());
 		Integer productId=productPojo.getId();
-		InventoryPojo old = inventoryService.selectByProductId(productId);
+		InventoryPojo old = inventoryService.getByProductId(productId);
         old.setQuantity(old.getQuantity()+inventoryForm.getQuantity());
         inventoryService.update(old);
 		return ConversionUtil.getInventoryData(old,productPojo.getName(), productPojo.getBarcode());
@@ -69,7 +69,7 @@ public class InventoryDto {
 
     public InventoryData getInventoryByBarcode(String barcode) throws ApiException {
         ProductPojo productPojo = productService.getByBarcode(barcode);
-        InventoryPojo inventoryPojo = inventoryService.selectByProductId(productPojo.getId());
+        InventoryPojo inventoryPojo = inventoryService.getByProductId(productPojo.getId());
         return ConversionUtil.getInventoryData(inventoryPojo,productPojo.getName(), productPojo.getBarcode());
     }
     

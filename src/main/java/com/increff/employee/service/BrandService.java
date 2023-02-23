@@ -102,7 +102,7 @@ public class BrandService {
 	}
 
 	@Transactional
-	public BrandPojo getIfNameAndCategoryExists(String brand, String category) throws ApiException {
+	public BrandPojo getIfBrandAndCategoryExists(String brand, String category) throws ApiException {
         BrandPojo b = dao.selectBrandCategory(brand, category);
         if (b == null) {
             throw new ApiException("Brand " + brand + " with category " + category + " does not exists");

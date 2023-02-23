@@ -86,6 +86,9 @@ function init(){
 
 $(document).ready(init);
 $(document).ready(getReportList);
+$(document).ready(function() {
+  $("brand-report-table").DataTable({ });
+});
 
 
 
