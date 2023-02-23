@@ -19,7 +19,6 @@ import com.increff.employee.service.ProductService;
 import com.increff.employee.util.ConversionUtil;
 import com.increff.employee.util.HelperUtil;
 import com.increff.employee.util.NormaliseUtil;
-import com.increff.employee.util.StringUtil;
 import com.increff.employee.util.ValidateUtil;
 
 @Component
@@ -36,10 +35,10 @@ public class ProductDto {
 
     @Transactional(rollbackOn = ApiException.class)
     public void add(ProductForm form) throws ApiException {
+        NormaliseUtil.normalizeProduct(form);    
         ValidateUtil.validateProductForm(form);
-        NormaliseUtil.normalizeProduct(form);
 
-        BrandPojo brandPojo = brandService.getIfNameAndCategoryExists(form.getBrand(), form.getCategory());
+        BrandPojo brandPojo = brandService.getIfBrandAndCategoryExists(form.getBrand(), form.getCategory());
         ProductPojo productPojo = ConversionUtil.getProductPojo(form, brandPojo.getId());
         productService.checkIfBarcodeExists(productPojo.getBarcode());
         productService.add(productPojo);
@@ -60,7 +59,6 @@ public class ProductDto {
 		for (ProductPojo p : list1) {
             BrandPojo b = brandService.get(p.getBrand_category_id());
             list2.add(ConversionUtil.getProductData(p, b.getBrand(), b.getCategory()));
-
 		}
 		return list2;
     }
@@ -69,7 +67,7 @@ public class ProductDto {
     public void update(Integer id, ProductForm form) throws ApiException {
         ValidateUtil.validateProductForm(form);
         NormaliseUtil.normalizeProduct(form);
-        BrandPojo brandPojo = brandService.getIfNameAndCategoryExists(form.getBrand(), form.getCategory());
+        BrandPojo brandPojo = brandService.getIfBrandAndCategoryExists(form.getBrand(), form.getCategory());
         ProductPojo productPojo = ConversionUtil.getProductPojo(form, brandPojo.getId());
         productService.update(id,productPojo);
     }

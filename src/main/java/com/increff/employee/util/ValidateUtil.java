@@ -57,10 +57,10 @@ public class ValidateUtil {
 
     public static void validateBrandForm(BrandForm brandform) throws ApiException {
         if (StringUtil.isEmpty(brandform.getBrand())) {
-            throw new ApiException("Brand  should not be empty.");
+            throw new ApiException("Brand should not be empty.");
         }
         if (StringUtil.isEmpty(brandform.getCategory())) {
-            throw new ApiException("category  should not be empty.");
+            throw new ApiException("Category should not be empty.");
         }
     }
 }
