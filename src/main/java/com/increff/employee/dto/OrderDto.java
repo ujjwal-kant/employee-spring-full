@@ -75,7 +75,7 @@ public class OrderDto {
         OrderData orderData = ConversionUtil.getOrderData(orderPojo, orderItemPojo);
         List<OrderItemData> orderItemDatas = new ArrayList<OrderItemData>();
         for (OrderItemPojo orderItem : orderItemPojo) {
-            ProductPojo product = productService.getCheck(orderItem.getProductId());
+            ProductPojo product = productService.getIfExists(orderItem.getProductId());
             OrderItemData orderItemData = ConversionUtil.getOrderItemData(orderItem, product);
             orderItemDatas.add(orderItemData);
         }

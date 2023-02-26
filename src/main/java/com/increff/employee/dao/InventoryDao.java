@@ -47,7 +47,7 @@ public class InventoryDao extends AbstractDao {
     // }
 
 	public void update(InventoryPojo p) {
-		// em.merge(p);
+		em.merge(p);
 	}
 
 }

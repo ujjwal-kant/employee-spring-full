@@ -60,10 +60,10 @@ public class InventoryService {
         dao.update(p);
     }
 
-    @Transactional
-    public InventoryPojo selectByProductId(Integer id){
-        return dao.selectByProductId(id);
-    }
+    // @Transactional
+    // public InventoryPojo selectByProductId(Integer id){
+    //     return dao.selectByProductId(id);
+    // }
 
     public void update(InventoryPojo old) {
         dao.update(old);

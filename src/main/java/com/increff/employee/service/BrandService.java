@@ -40,9 +40,9 @@ public class BrandService {
 		return brandPojo;
 	}
 
-	public BrandPojo get(Integer id) throws ApiException {
-        return getIfExists(id);
-    }
+	// public BrandPojo get(Integer id) throws ApiException {
+    //     return getIfExists(id);
+    // }
 
 	public List<BrandPojo> getByBrandAndCategory(String brand, String category) {
         if(brand.equals("") && category.equals("")) {
@@ -85,26 +85,25 @@ public class BrandService {
 	// 	return list2;
 	// }
 
-	@Transactional
-	public BrandData selectBrandCategory(String Brand,String Category) {
-		BrandPojo b= dao.selectBrandCategory(Brand,Category);
-		return ConversionUtil.getBrandData(b);
-	}
+	// @Transactional
+	// public BrandData selectBrandCategory(String Brand,String Category) {
+	// 	BrandPojo b= dao.selectBrandCategory(Brand,Category);
+	// 	return ConversionUtil.getBrandData(b);
+	// }
 
 	@Transactional(rollbackOn  = ApiException.class)
 	public BrandPojo updateBrandCategory(Integer id, BrandPojo brandPojo) throws ApiException {
 		BrandPojo ex = getIfExists(id);
-		if(ex.getCategory().equals(brandPojo.getCategory()) && ex.getBrand().equals(brandPojo.getBrand())){
-		return ex;
-	    }
-		else{
+		
+		if(ex.getCategory().equals(brandPojo.getCategory()) && ex.getBrand().equals(brandPojo.getBrand()))return ex;
+
 		checkIfBrandAndCategoryExists(brandPojo.getBrand(), brandPojo.getCategory());
 		ex.setBrand(brandPojo.getBrand());
 		ex.setCategory(brandPojo.getCategory());
 		dao.update(ex);
 		System.out.println(brandPojo.getCategory());
 		System.out.println(ex.getCategory());
-		return ex;}
+		return ex;
 	}
 
 	@Transactional

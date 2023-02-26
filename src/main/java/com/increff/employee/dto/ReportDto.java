@@ -64,7 +64,7 @@ public class ReportDto {
         List<ProductPojo>list1=productService.getAllProduct();
         List<ProductData>allProduct = new ArrayList<ProductData>();
 		for (ProductPojo p : list1) {
-            BrandPojo b = brandService.get(p.getBrand_category_id());
+            BrandPojo b = brandService.getBrandCategorybyID(p.getBrand_category_id());
             allProduct.add(ConversionUtil.getProductData(p, b.getBrand(), b.getCategory()));
 
 		}

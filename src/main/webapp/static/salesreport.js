@@ -71,6 +71,7 @@ function getSalesReportUrl(){
  
 
 //  var lastday=
+ var data1={};
  function displaySalesReport(data) {
      var $tbody = $('#sales-table').find('tbody');
      $tbody.empty();

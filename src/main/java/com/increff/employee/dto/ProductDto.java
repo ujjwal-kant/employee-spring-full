@@ -47,8 +47,8 @@ public class ProductDto {
 
     @Transactional
     public ProductData getProductByID(Integer id) throws ApiException {
-		ProductPojo productPojo=productService.getCheck(id);
-        BrandPojo brandPojo = brandService.get(productPojo.getBrand_category_id());
+		ProductPojo productPojo=productService.getIfExists(id);
+        BrandPojo brandPojo = brandService.getBrandCategorybyID(productPojo.getBrand_category_id());
         return ConversionUtil.getProductData(productPojo, brandPojo.getBrand(), brandPojo.getCategory());
     }
 
@@ -57,7 +57,7 @@ public class ProductDto {
         List<ProductPojo>list1= productService.getAllProduct();
         List<ProductData> list2 = new ArrayList<ProductData>();
 		for (ProductPojo p : list1) {
-            BrandPojo b = brandService.get(p.getBrand_category_id());
+            BrandPojo b = brandService.getBrandCategorybyID(p.getBrand_category_id());
             list2.add(ConversionUtil.getProductData(p, b.getBrand(), b.getCategory()));
 		}
 		return list2;
@@ -78,7 +78,7 @@ public class ProductDto {
         List<ProductPojo> list1 = productService.serachByProductNameAndBarcode(form.getBarcode(),form.getName());
         List<ProductData> list2 = new ArrayList<ProductData>();
 		for (ProductPojo p : list1) {
-            BrandPojo b = brandService.get(p.getBrand_category_id());
+            BrandPojo b = brandService.getBrandCategorybyID(p.getBrand_category_id());
             list2.add(ConversionUtil.getProductData(p, b.getBrand(), b.getCategory()));
 
 		}

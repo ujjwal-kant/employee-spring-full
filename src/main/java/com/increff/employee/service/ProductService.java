@@ -37,8 +37,6 @@ public class ProductService {
 		ProductPojo old = getIfExists(id);
         old.setName(productPojo.getName());
         old.setMrp(productPojo.getMrp());
-        old.setBrand_category_id(productPojo.getBrand_category_id());
-		old.setBarcode(productPojo.getBarcode());
 		dao.update(old);
 	}
 
@@ -51,21 +49,22 @@ public class ProductService {
     }
 
 
-	@Transactional
-	public ProductPojo getCheck(Integer id) throws ApiException {
-		ProductPojo p = dao.select(id);
-		if (p == null) {
-			throw new ApiException("Product with given ID does not exit, id: " + id);
-		}
-		return p;
-	}
+	// @Transactional
+	// public ProductPojo getCheck(Integer id) throws ApiException {
+	// 	ProductPojo p = dao.select(id);
+	// 	if (p == null) {
+	// 		throw new ApiException("Product with given ID does not exit, id: " + id);
+	// 	}
+	// 	return p;
+	// }
 	
 
-	public void checkIfBarcodeExists(String barcode) throws ApiException {
+	public ProductPojo checkIfBarcodeExists(String barcode) throws ApiException {
         ProductPojo productPojo = dao.selectByBarcode(barcode);
         if(productPojo != null) {
             throw new ApiException("Another Product with barcode " + productPojo.getBarcode() + " already exists");
         }
+		return productPojo;
     }
 
 	public ProductPojo getByBarcode(String barcode) throws ApiException {

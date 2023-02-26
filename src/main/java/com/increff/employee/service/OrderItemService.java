@@ -30,22 +30,14 @@ public class OrderItemService {
         dao.deleteByOrderId(orderId);
     }
 
-    @Transactional(rollbackOn = ApiException.class)
-    public void insertMultiple(List<OrderItemPojo> orderItemPojos) {
-        for (OrderItemPojo orderItemPojo : orderItemPojos) {
-            dao.insert(orderItemPojo);
-        }
-    }
+    // @Transactional(rollbackOn = ApiException.class)
+    // public void insertMultiple(List<OrderItemPojo> orderItemPojos) {
+    //     for (OrderItemPojo orderItemPojo : orderItemPojos) {
+    //         dao.insert(orderItemPojo);
+    //     }
+    // }
 
     public List<OrderItemPojo> getAllOrderItemBetween(java.util.Date yesterday, java.util.Date date) throws ApiException {
-        // java.sql.Date startingDate1 = new java.sql.Date(yesterday.getTime());
-        // java.sql.Date endingDate1 = new java.sql.Date(date.getTime());
-        // Date yesterday1=(Date) TimeUtil.getStartOfDay(yesterday);
-        // Date date1=(Date) TimeUtil.getStartOfDay(date);
-        System.out.println(yesterday);
-
-        System.out.println(date);
-
         List<OrderItemPojo> orderItemPojoList = new ArrayList<OrderItemPojo>();
         List<OrderPojo> orderPojoList = orderService.getAllBetween(yesterday, date);
         for(OrderPojo orderPojo : orderPojoList) {
@@ -60,8 +52,8 @@ public class OrderItemService {
         dao.insert(orderItemPojo);
     }
 
-    public List<OrderItemPojo> getByOrderId(int orderId) {
-        return dao.selectByOrderId(orderId);
-    }
+    // public List<OrderItemPojo> getByOrderId(int orderId) {
+    //     return dao.selectByOrderId(orderId);
+    // }
 }
 
