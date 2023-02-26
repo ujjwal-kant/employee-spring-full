@@ -14,13 +14,13 @@ import com.increff.employee.pojo.BrandPojo;
 @Repository
 public class BrandDao extends AbstractDao {
 
-	private static String DELETE_ID = "delete from BrandPojo p where id=:id";
-	private static String SELECT_ID = "select p from BrandPojo p where id=:id";
-	private static String SELECT_ALL = "select p from BrandPojo p";
-	private static String SEARCH_BY_BRAND_AND_CATEGORY = "select p from BrandPojo p where brand=:brand and category=:category";
-	private static String SEARCH_BY_BRAND = "select p from BrandPojo p where brand=:brand";
-	private static String SEARCH_BY_CATEGORY = "select p from BrandPojo p where category=:category";
-	private static String SELECT_LIKE_BARND_CATEGORY = "select b from BrandPojo b where brand like :brand and category like :category";
+	private static final String DELETE_ID = "delete from BrandPojo p where id=:id";
+	private static final String SELECT_ID = "select p from BrandPojo p where id=:id";
+	private static final String SELECT_ALL = "select p from BrandPojo p";
+	private static final String SEARCH_BY_BRAND_AND_CATEGORY = "select p from BrandPojo p where brand=:brand and category=:category";
+	private static final String SEARCH_BY_BRAND = "select p from BrandPojo p where brand=:brand";
+	private static final String SEARCH_BY_CATEGORY = "select p from BrandPojo p where category=:category";
+	private static final String SELECT_LIKE_BARND_CATEGORY = "select b from BrandPojo b where brand like :brand and category like :category";
 	// private static String brand_CategoryId = "select p from BrandPojo p where brand=:brand and category=:category";
 
 	@PersistenceContext

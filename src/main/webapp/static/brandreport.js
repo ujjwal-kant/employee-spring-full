@@ -1,6 +1,6 @@
 function getUrl(){
 	var baseUrl = $("meta[name=baseUrl]").attr("content")
-	return baseUrl + "/api/brand/";
+	return baseUrl + "/api/brands/";
 }
 
 function getReportList(){
@@ -9,7 +9,8 @@ function getReportList(){
 		url: url,
 		type: 'GET',
 		success: function(data) {
-			displaybrandReportList(data); 
+			displaybrandReportList(data);
+      pagination(); 
 		},
 		error: function() {
 			console.log("Error");
@@ -86,9 +87,7 @@ function init(){
 
 $(document).ready(init);
 $(document).ready(getReportList);
-$(document).ready(function() {
-  $("brand-report-table").DataTable({ });
-});
+
 
 
 

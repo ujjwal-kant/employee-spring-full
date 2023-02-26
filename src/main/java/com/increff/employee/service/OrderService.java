@@ -1,6 +1,8 @@
 
 package com.increff.employee.service;
 
+import java.sql.Timestamp;
+import java.time.LocalDateTime;
 import java.util.List;
 
 import javax.transaction.Transactional;
@@ -31,6 +33,14 @@ public class OrderService {
             throw new ApiException("Order with given id not found");
         }
         return orderPojo;
+    }
+
+    @Transactional(rollbackOn = ApiException.class)
+    public void update(int id,LocalDateTime time) throws ApiException {
+        OrderPojo ex = getById(id);
+        ex.setIsInvoiceCreated(true);
+        Timestamp timestamp = Timestamp.valueOf(time);
+        ex.setInvoicedCreatedAt(timestamp);
     }
 
     public List<OrderPojo> getAll() {

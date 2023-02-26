@@ -59,7 +59,7 @@ public class InventoryDto {
         ValidateUtil.validateInventoryForm(inventoryForm);   
 
         ProductPojo productPojo = productService.getByBarcode(inventoryForm.getBarcode());
-        InventoryPojo inventoryPojo = inventoryService.getByProductId(productPojo.getId());
+        inventoryService.getByProductId(productPojo.getId());
 		Integer productId=productPojo.getId();
 		InventoryPojo old = inventoryService.getByProductId(productId);
         old.setQuantity(old.getQuantity()+inventoryForm.getQuantity());

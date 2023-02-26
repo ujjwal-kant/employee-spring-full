@@ -15,9 +15,9 @@ import com.increff.employee.pojo.EmployeePojo;
 @Repository
 public class EmployeeDao extends AbstractDao {
 
-	private static String DELETE_ID = "delete from EmployeePojo p where id=:id";
-	private static String SELECT_ID = "select p from EmployeePojo p where id=:id";
-	private static String SELECT_ALL = "select p from EmployeePojo p";
+	private static final String DELETE_ID = "delete from EmployeePojo p where id=:id";
+	private static final String SELECT_ID = "select p from EmployeePojo p where id=:id";
+	private static final String SELECT_ALL = "select p from EmployeePojo p";
 
 	@PersistenceContext
 	private EntityManager em;

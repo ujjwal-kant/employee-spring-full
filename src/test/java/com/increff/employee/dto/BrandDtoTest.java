@@ -4,10 +4,11 @@ import static org.junit.Assert.assertEquals;
 
 import java.util.List;
 
+import com.increff.employee.service.AbstractUnitTest;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import com.increff.employee.service.AbstractUnitTest;
+//import com.increff.employee.service.AbstractUnitTest;
 import com.increff.employee.service.ApiException;
 import com.increff.employee.service.BrandService;
 import com.increff.employee.util.StringUtil;

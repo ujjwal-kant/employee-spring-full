@@ -6,19 +6,17 @@ import com.increff.employee.pojo.DailyReportSalesPojo;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import javax.persistence.TableGenerator;
 import javax.persistence.TypedQuery;
 import javax.transaction.Transactional;
 
-import java.util.Date;
 import java.util.List;
 
 
 @Repository
 public class DailySalesReportDao extends AbstractDao {
 
-    private static String select_all = "select p from DailyReportSalesPojo p";
-    private static String SELECT_LAST_DAY = "select p from DailyReportSalesPojo p order by Id DESC";
+    private static final String select_all = "select p from DailyReportSalesPojo p";
+    private static final String SELECT_LAST_DAY = "select p from DailyReportSalesPojo p order by Id DESC";
 
     @PersistenceContext
 	private EntityManager em;

@@ -15,9 +15,9 @@ import com.increff.employee.pojo.OrderPojo;
 @Repository
 public class OrderDao extends AbstractDao {
 
-	private static String SELECT_ID = "select p from OrderPojo p where id=:id";
-	private static String SELECT_ALL = "select p from OrderPojo p";
-	private static String SELECT_BETWEEN_START_END_DATE = "select o from OrderPojo o where o.createdAt between :startingDate and :endingDate";
+	private static final String SELECT_ID = "select p from OrderPojo p where id=:id";
+	private static final String SELECT_ALL = "select p from OrderPojo p";
+	private static final String SELECT_BETWEEN_START_END_DATE = "select o from OrderPojo o where o.createdAt between :startingDate and :endingDate";
 
     @PersistenceContext
 	private EntityManager em;

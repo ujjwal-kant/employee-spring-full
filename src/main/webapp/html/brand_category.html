@@ -15,26 +15,6 @@
  <!-- Top row with form-->
  <div class="row">
  <div class="col-12">
-		<!-- <form class="form-inline" id="search-form">
-		<div class="form-group col-4">
-		<label for="inputBrand" class="col-sm-2 col-form-label">&nbsp;&nbsp;&nbsp;&nbsp;Brand</label>
-		  <input type="text" class="form-control" name="brand" id="inputBrand" placeholder="Enter Brand">
-	    </div> 
-		<div class="form-group col-4">
-		<label for="inputCategory" class="col-sm-2 col-form-label">&nbsp;&nbsp;&nbsp;&nbsp;Category</label>
-		<input type="text" class="form-control" name="category" id="inputCategory" placeholder="Enter Category">
-	    </div>
-	    </form> 
-	    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-	  
-	  <div class="form-group col-4" style=" padding-left: 89px;">
-		<label class="col-sm-12 col-form-label" style="color:white">g</label>
-	  <button type="button" class="btn btn-outline-primary" id="search-by-brand-category">Search</button>
-	  &nbsp;
-	  <button type="button" class="btn btn-outline-primary" id="add-brand">Create</button>
-	  &nbsp;
-	  <button type="button" class="btn btn-outline-primary" id="upload-data">Upload</button> -->
-	 <!-- </div> -->
 
 	 <form id="search-form">
 		<div class="row">
@@ -50,9 +30,9 @@
 				<div class="ml-auto">
 				<button type="button" class="btn btn-dark" id="search-by-brand-category">Search</button>
 				&nbsp;
-				<button type="button" class="btn btn-dark" id="add-brand">Create</button>
+				<button type="button" class="btn btn-dark" id="add-brand" th:if="${info.getRole() == 'supervisor'}">Create</button>
 				&nbsp;
-				<button type="button" class="btn btn-dark" id="upload-data">Upload</button>
+				<button type="button" class="btn btn-dark" id="upload-data" th:if="${info.getRole() == 'supervisor'}">Upload</button>
 			    </div>
 			</div>
 		</div>
@@ -70,12 +50,12 @@
 
  <!-- Table -->
  <div class="col-12">
-	<table class="table table-bordered table-striped" id="brand-table">
+	<table class="table table-bordered table-striped datatable" id="brand-table">
 	  <thead class="thead-dark">
 	    <tr>
 	      <th class="text-center" scope="col">Brand</th>
 	      <th class="text-center" scope="col">Category</th>
-	      <th class="text-center" scope="col">Actions</th>
+	      <th class="text-center" scope="col" th:if="${info.getRole() == 'supervisor'}">Actions</th>
 	    </tr>
 	  </thead>
 	  <tbody class="text-center">
@@ -100,13 +80,13 @@
 				<div class="form-group" style="margin-bottom:20px;">
 					<label for="inputBrand" class="col-sm-2 col-form-label">Brand</label>
 					<div class="col-sm-12">
-						<input type="text" class="form-control w-100" name="brand" placeholder="Enter Brand" required>
+						<input type="text" class="form-control w-100" name="brand" placeholder="Enter Brand" required maxlength="30">
 					</div>
 				</div>
 				<div class="form-group" style="margin-bottom:20px;">
 					<label for="inputCategory" class="col-sm-2 col-form-label">Category</label>
 			        <div class="col-sm-12">
-			            <input type="text" class="form-control w-100" name="category" placeholder="Enter Category" required>
+			            <input type="text" class="form-control w-100" name="category" placeholder="Enter Category" required maxlength="30">
 			        </div>
 				</div>
 		      </div>

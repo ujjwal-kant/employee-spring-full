@@ -20,7 +20,7 @@ import io.swagger.annotations.ApiOperation;
 
 @Api
 @RestController
-@RequestMapping("/api/brand")
+@RequestMapping("/api/brands")
 public class BrandApiController{
 
 	@Autowired

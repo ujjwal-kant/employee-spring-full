@@ -1,7 +1,7 @@
 
 function getBrandUrl(){
 	var baseUrl = $("meta[name=baseUrl]").attr("content")
-	return baseUrl + "/api/brand";
+	return baseUrl + "/api/brands";
 }
 
 function getRole(){
@@ -48,11 +48,11 @@ function addBrand(event){
 	   headers: {
        	'Content-Type': 'application/json'
        },	   
-	   success: function(response) {
-	   		getBrandList();
+	   success: function(response) {	   		
 			$('#add-brand-modal').modal('toggle');  
 			resetForm();
 			SuccessMessage("Successfully Added");
+			getBrandList();
 			// $.notify(JSON.parse(json).brand + " in category: "+JSON.parse(json).category + " added successfully!","success");
 	   },
 	   error: handleAjaxError
@@ -82,9 +82,9 @@ function updateBrand(event){
        	'Content-Type': 'application/json'
        },	   
 	   success: function(response) {
+		$('#edit-brand-modal').modal('toggle');	
 		    SuccessMessage("Successfully Updated");
-	   		getBrandList();   
-	        $('#edit-brand-modal').modal('toggle');	
+			getBrandList();
 	   },
 	   error: handleAjaxError
 	});
@@ -94,13 +94,15 @@ function updateBrand(event){
 
 
 function getBrandList(){
-	console.log(getRole());
+	// console.log(getRole());
 	var url = getBrandUrl();
 	$.ajax({
 	   url: url,
 	   type: 'GET',
 	   success: function(data) {
+		$('.datatable').DataTable().destroy();
 	   		displayBrandList(data);  
+			   pagination();
 	   },
 	   error: handleAjaxError
 	});
@@ -207,6 +209,7 @@ function downloadErrors(){
 
 function displayBrandList(data){
 	var $tbody = $('#brand-table').find('tbody');
+	
 	listofbrands=[];
 	listofcategorys=[];
 	mapofbrands={};
@@ -231,14 +234,24 @@ function displayBrandList(data){
 
 		// console.log(e);
 		// '<button type="button" class="btn btn-outline-primary" onclick="deleteBrand(' + e.id + ')">delete</button>'
-		var buttonHtml = ' <button type="button" class="btn btn-dark" onclick="displayEditBrand(' + e.id + ')">edit</button>'
-		var row = '<tr>'
-		// + '<td>' + e.id + '</td>'
-		+ '<td>' + e.brand + '</td>'
-		+ '<td>'  + e.category + '</td>'
-		+ '<td>' + buttonHtml + '</td>'
-		+ '</tr>';
-        $tbody.append(row);
+		if(getRole()==="supervisor"){
+		    var buttonHtml = ' <button type="button" class="btn btn-dark" onclick="displayEditBrand(' + e.id + ')">edit</button>'
+		    var row = '<tr>'
+		    // + '<td>' + e.id + '</td>'
+		    + '<td>' + e.brand + '</td>'
+		    + '<td>'  + e.category + '</td>'
+		    + '<td>' + buttonHtml + '</td>'
+		    + '</tr>';
+		}
+		else{
+			var row = '<tr>'
+		    // + '<td>' + e.id + '</td>'
+		    + '<td>' + e.brand + '</td>'
+		    + '<td>'  + e.category + '</td>'
+		    + '</tr>';
+		}
+            $tbody.append(row);
+		
 	}
 }
 

@@ -1,11 +1,11 @@
 function getSalesReportUrl(){
     var baseUrl = $("meta[name=baseUrl]").attr("content")
-    return baseUrl + "/api/report/sales";
+    return baseUrl + "/api/reports/sales";
  }
  
  function getBrandCategoryUrl(){
      var baseUrl = $("meta[name=baseUrl]").attr("content")
-     return baseUrl + "/api/brand";
+     return baseUrl + "/api/brands";
  }
  brandCategoryData = []
  brandSet = new Set()
@@ -63,6 +63,7 @@ function getSalesReportUrl(){
         },
         success: function(response) {
              displaySalesReport(response);
+             pagination(); 
         },
         error: handleAjaxError
      });

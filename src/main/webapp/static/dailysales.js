@@ -1,6 +1,6 @@
 function getDailySalesReportUrl(){
     var baseUrl = $("meta[name=baseUrl]").attr("content")
-    return baseUrl + "/api/report";
+    return baseUrl + "/api/reports";
  }
  
  function filterSalesReport() {
@@ -13,6 +13,7 @@ function getDailySalesReportUrl(){
         },
         success: function(response) {
              displayDailySalesReport(response);
+             pagination();
         },
         error: handleAjaxError
      });

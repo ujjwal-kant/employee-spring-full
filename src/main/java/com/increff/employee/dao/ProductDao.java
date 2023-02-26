@@ -16,10 +16,10 @@ import com.increff.employee.pojo.ProductPojo;
 @Repository
 public class ProductDao extends AbstractDao {
 
-	private static String SELECT_ID = "select p from ProductPojo p where id=:id";
-	private static String SELECT_ALL = "select p from ProductPojo p";
-	private static String SEARCH_LIKE_NAME_AND_BARCODE = "select b from ProductPojo b where name like :name and barcode like :barcode";
-    private static String SELECT_BY_BARCODE = "select p from ProductPojo p where barcode=:barcode";
+	private static final String SELECT_ID = "select p from ProductPojo p where id=:id";
+	private static final String SELECT_ALL = "select p from ProductPojo p";
+	private static final String SEARCH_LIKE_NAME_AND_BARCODE = "select b from ProductPojo b where name like :name and barcode like :barcode";
+    private static final String SELECT_BY_BARCODE = "select p from ProductPojo p where barcode=:barcode";
 
 	@PersistenceContext
 	private EntityManager em;

@@ -17,7 +17,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.increff.employee.dto.AdminDto;
 import com.increff.employee.model.InfoData;
 import com.increff.employee.model.LoginForm;
 import com.increff.employee.pojo.UserPojo;
@@ -35,8 +34,6 @@ public class LoginController {
 	private UserService service;
 	@Autowired
 	private InfoData info;
-	@Autowired
-    private AdminDto dto;
 
 	private boolean checkPass(String plainPassword, String hashedPassword) {
 		if (BCrypt.checkpw(plainPassword, hashedPassword))

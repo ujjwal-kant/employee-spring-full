@@ -62,7 +62,6 @@ public class PDF_Generator {
 
 
             } catch (FOPException | TransformerException e) {
-                // TODO Auto-generated catch block
                 e.printStackTrace();
             } finally {
                 out.close();

@@ -6,16 +6,11 @@ import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 
-import javax.transaction.Transactional;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
-import com.google.protobuf.Api;
-import com.google.protobuf.Int64Value;
 import com.increff.employee.model.BrandData;
-import com.increff.employee.model.BrandForm;
 import com.increff.employee.model.DailySalesReportData;
 import com.increff.employee.model.ProductData;
 import com.increff.employee.model.ReportInventoryData;
@@ -257,14 +252,14 @@ public class ReportDto {
         //how to check if date is in correct format or not
     }
 
-    public List<SalesReportData> getDailyReport() {
-        return null;
-    }
+    // public List<SalesReportData> getDailyReport() {
+    //     return null;
+    // }
 
-    public List<BrandData> getBrandCategoryReport(BrandForm brandForm) {
-        return null;
-        //happening from brandpojo directly
-    }
+    // public List<BrandData> getBrandCategoryReport(BrandForm brandForm) {
+    //     return null;
+    //     //happening from brandpojo directly
+    // }
 
     public List<DailySalesReportData> getDailySalesReport() throws ApiException {
         // generateDailySalesReport();
@@ -318,7 +313,7 @@ public class ReportDto {
             // System.out.println(today);
 
             cnt++;
-            if(cnt>5)
+            if(cnt>10)
             break;
         }
         return null;

@@ -1,6 +1,6 @@
 function getOrderUrl() {
   var baseUrl = $("meta[name=baseUrl]").attr("content");
-  return baseUrl + "/api/order";
+  return baseUrl + "/api/orders";
 }
 
 function getInventoryUrl() {
@@ -10,7 +10,7 @@ function getInventoryUrl() {
 
 function getProductUrl() {
   var baseUrl = $("meta[name=baseUrl]").attr("content");
-  return baseUrl + "/api/product";
+  return baseUrl + "/api/products";
 }
 
 function getInvoiceUrl() {
@@ -116,7 +116,9 @@ function getOrderList() {
     url: url,
     type: "GET",
     success: function (data) {
+      $('.datatable').DataTable().destroy();
       displayOrderList(data);
+      pagination();
     },
     error: handleAjaxError,
   });
@@ -289,14 +291,15 @@ function displayOrderList(data) {
   for (var i=data.length-1; i>=0; i--) {
     cnt++;
     var b = data[i];
+    // console.log(b);
     // var buttonHtml = '<button onclick="deleteOrder(' + b.id + ')">delete</button>'
     var orderDateStr = convertTimeStampToDateTime(b.createdAt);
     // var totalBillAmount = calculateTotalPrice(b.orderItems);
     var buttonHtml = "";
     if (getRole() === "supervisor") {
       if (b.isInvoiceCreated == true) {
-        buttonHtml =
-          '<button type="button" class="btn btn-dark" disabled="disabled"  title="Edit"></button>';
+          // buttonHtml =
+          // '<button type="button" class="btn btn-dark" disabled="disabled"  title="Edit"></button>';
       } else {
         buttonHtml =
           '<button type="button" class="btn btn-dark" title="Edit" onclick="displayEditOrderModal(' +
@@ -310,9 +313,11 @@ function displayOrderList(data) {
       b.id +
       ')">Details</button>';
     buttonHtml +=
-      ' <button type="button" class="btn btn-dark"  title="Download Invoice" onclick="downloadInvoice(' +
+      ' <button type="button" class="btn btn-dark" id="generateInvoice" title="Generate Invoice" onclick="GenerateInvoice(' +
       b.id +
-      ')">Download Invoice</button>';
+      ')">Generate Invoice</button>'; 
+
+    
     var row =
       "<tr>" +
       '<td class="text-center">' +
@@ -502,6 +507,7 @@ function init() {
   $("#add-order-button").click(displayAddModal);
   $("#update-order").click(updateOrder);
   $("#refresh-data").click(getOrderList);
+  $('#generateInvoice').click(getOrderList);
 }
 
 $(document).ready(init);
@@ -574,36 +580,28 @@ function disableOrderEdit(id) {
   });
 }
 
-function downloadInvoice(id) {
-  // var req = new XMLHttpRequest();
-  // req.open("GET", `/pos/download/invoice/${id}`, true);
-  // req.responseType = "blob";
-
-  // req.onload = function (event) {
-  //   var blob = req.response;
-  //   $(".notifyjs-wrapper").trigger("notify-hide");
-  //   $.notify("Invoice generated!", "success");
-  //   var link = document.createElement("a");
-  //   link.href = window.URL.createObjectURL(blob);
-  //   link.download = `invoice${id}.pdf`;
-  //   link.click();
-
-  //   disableOrderEdit(id);
-  // };
-
-  // req.send();
-
-  var url=getInvoiceUrl()+'/'+id;
+function GenerateInvoice(id) {
+  var url = getInvoiceUrl() + "/" + id;
   $.ajax({
-    url: url,
-    type: "GET",
-    success: function (response) {
-      getOrderList();
-      var url = getInvoiceUrl() + "/download/" + id;
+      url: url,
+      type: 'GET',
+      success: function () {
+          // var url2 = getInvoiceUrl()+"/download/"+id;
+          // window.location.href = url;
+          getOrderList();
 
-      window.location.href = url;
-      downloadInvoiceNow(id);
-    },
-    error: handleAjaxError,
+          console.log("Hello")
+          download(id);
+          console.log("hello");
+      },
+
+      error: handleAjaxError
   });
+}
+
+function download(id) {
+  var url = getInvoiceUrl() + "/download/" + id;
+
+  window.location.href = url;
+
 }

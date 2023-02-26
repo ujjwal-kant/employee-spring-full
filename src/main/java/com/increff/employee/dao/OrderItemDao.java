@@ -14,8 +14,8 @@ import com.increff.employee.pojo.OrderItemPojo;
 @Repository
 public class OrderItemDao extends AbstractDao {
 
-    private static String SELECT_ID= "select oi from OrderItemPojo oi where orderId=:orderId";
-    private static String SELECT_BY_ORDER_ID="select p from OrderItemPojo p where orderId=:orderId";
+    private static final String SELECT_ID= "select oi from OrderItemPojo oi where orderId=:orderId";
+    private static final String SELECT_BY_ORDER_ID="select p from OrderItemPojo p where orderId=:orderId";
 
     @PersistenceContext
 	private EntityManager em;

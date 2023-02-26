@@ -9,8 +9,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.increff.employee.dto.ReportDto;
-import com.increff.employee.model.BrandData;
-import com.increff.employee.model.BrandForm;
 import com.increff.employee.model.DailySalesReportData;
 import com.increff.employee.model.ReportInventoryData;
 import com.increff.employee.model.SalesReportData;
@@ -22,17 +20,17 @@ import io.swagger.annotations.ApiOperation;
 
 @Api
 @RestController
-@RequestMapping("/api/report")
+@RequestMapping("/api/reports")
 public class ReportsApiController {
     
     @Autowired
     private ReportDto dto;
 
-	@ApiOperation(value = "Gets brand-category report")
-    @RequestMapping(value = "/brand", method = RequestMethod.POST)
-    public List<BrandData> brandCategoryReport(@RequestBody BrandForm brandForm) throws ApiException {
-        return dto.getBrandCategoryReport(brandForm);
-    }
+	// @ApiOperation(value = "Gets brand-category report")
+    // @RequestMapping(value = "/brand", method = RequestMethod.POST)
+    // public List<BrandData> brandCategoryReport(@RequestBody BrandForm brandForm) throws ApiException {
+    //     return dto.getBrandCategoryReport(brandForm);
+    // }
 
     @ApiOperation(value = "Gets report of inventory")
 	@RequestMapping(path = "/inventory", method = RequestMethod.GET)

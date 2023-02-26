@@ -93,12 +93,18 @@ public class BrandService {
 
 	@Transactional(rollbackOn  = ApiException.class)
 	public BrandPojo updateBrandCategory(Integer id, BrandPojo brandPojo) throws ApiException {
-		checkIfBrandAndCategoryExists(brandPojo.getBrand(), brandPojo.getCategory());
 		BrandPojo ex = getIfExists(id);
+		if(ex.getCategory().equals(brandPojo.getCategory()) && ex.getBrand().equals(brandPojo.getBrand())){
+		return ex;
+	    }
+		else{
+		checkIfBrandAndCategoryExists(brandPojo.getBrand(), brandPojo.getCategory());
 		ex.setBrand(brandPojo.getBrand());
 		ex.setCategory(brandPojo.getCategory());
 		dao.update(ex);
-		return ex;
+		System.out.println(brandPojo.getCategory());
+		System.out.println(ex.getCategory());
+		return ex;}
 	}
 
 	@Transactional

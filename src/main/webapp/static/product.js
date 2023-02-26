@@ -1,12 +1,17 @@
 
 function getProductUrl(){
 	var baseUrl = $("meta[name=baseUrl]").attr("content")
-	return baseUrl + "/api/product";
+	return baseUrl + "/api/products";
 }
 
 function getBrandUrl(){
 	var baseUrl = $("meta[name=baseUrl]").attr("content")
-	return baseUrl + "/api/brand";
+	return baseUrl + "/api/brands";
+}
+
+function getRole(){
+    var role = $("meta[name=role]").attr("content")
+    return role;
 }
 
 var listofbrands=[];
@@ -320,7 +325,9 @@ function getProductList(){
 	   url: url,
 	   type: 'GET',
 	   success: function(data) {
+		$('.datatable').DataTable().destroy();
 	   		displayProductList(data);  
+			pagination();
 	   },
 	   error: handleAjaxError
 	});
@@ -425,19 +432,32 @@ function displayProductList(data){
 	// console.log(data);
 	var $tbody = $('#product-table').find('tbody');
 	$tbody.empty();
+	var cnt=0;
 	for(var i in data){
 		var e = data[i];
-		// console.log(e);
-		var buttonHtml =' <button type="button" class="btn btn-dark" onclick="displayEditProduct(' + e.id + ')">edit </button>'
-		var row = '<tr>'
-		+ '<td>' + e.id + '</td>'
-		+ '<td>' + e.barcode + '</td>'
-		+ '<td>' + e.brand + '</td>'
-		+ '<td>' + e.category + '</td>'
-		+ '<td>'  + e.name + '</td>'
-		+ '<td>'  + (e.mrp).toFixed(2) + '</td>'
-		+ '<td>' + buttonHtml + '</td>'
-		+ '</tr>';
+		cnt++;
+		if(getRole()=="supervisor"){
+		    var buttonHtml =' <button type="button" class="btn btn-dark" onclick="displayEditProduct(' + e.id + ')">edit </button>'
+		    var row = '<tr>'
+		    + '<td>' + cnt + '</td>'
+		    + '<td>' + e.barcode + '</td>'
+		    + '<td>' + e.brand + '</td>'
+		    + '<td>' + e.category + '</td>'
+		    + '<td>'  + e.name + '</td>'
+		    + '<td>'  + (e.mrp).toFixed(2) + '</td>'
+		    + '<td>' + buttonHtml + '</td>'
+		    + '</tr>';
+		}
+		else{
+			var row = '<tr>'
+		    + '<td>' + cnt + '</td>'
+		    + '<td>' + e.barcode + '</td>'
+		    + '<td>' + e.brand + '</td>'
+		    + '<td>' + e.category + '</td>'
+		    + '<td>'  + e.name + '</td>'
+		    + '<td>'  + (e.mrp).toFixed(2) + '</td>'
+		    + '</tr>';
+		}
         $tbody.append(row);
 	}
 }
@@ -505,7 +525,9 @@ function displayProduct(data){
 }
 
 function displayProductData(){	
+	resetForm();
    $('#add-product-modal').modal('toggle');
+   
 }
 
 

@@ -31,6 +31,14 @@ function setActive(){
     }
 }
 
+function pagination(){
+    var table = $('.datatable');
+
+    $(table).DataTable({
+    });
+}
+
+$(document).ready(setActive());
 
 function handleAjaxError(response){
 	var response = JSON.parse(response.responseText);

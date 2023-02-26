@@ -128,9 +128,11 @@ function getInventoryList(){
 	   url: url,
 	   type: 'GET',
 	   success: function(data) {
+		$('.datatable').DataTable().destroy();
 	   		displayInventoryList(data);  
 			populateBarcodeDropdown("#inventory-add-form");
 			populateBarcodeDropdown("#inventory-update-form");
+			pagination();
 	   },
 	   error: handleAjaxError
 	});
@@ -237,12 +239,20 @@ function displayInventoryList(data){
 	$tbody.empty();
 	for(var i in data){
 		var e = data[i];
-		var buttonHtml = ' <button type="button" class="btn btn-dark" onclick="displayEditInventory(' + "'"+ String(e.barcode) +"'"+ ')">edit</button>'
-		var row = '<tr>'
-		+ '<td>' + e.barcode + '</td>'
-		+ '<td>'  + e.quantity + '</td>'
-		+ '<td>' + buttonHtml + '</td>'
-		+ '</tr>';
+		if(getRole()==="supervisor"){
+		    var buttonHtml = ' <button type="button" class="btn btn-dark" onclick="displayEditInventory(' + "'"+ String(e.barcode) +"'"+ ')">edit</button>'
+		    var row = '<tr>'
+		    + '<td>' + e.barcode + '</td>'
+		    + '<td>'  + e.quantity + '</td>'
+		    + '<td>' + buttonHtml + '</td>'
+		    + '</tr>';
+		}
+		else{
+            var row = '<tr class="text-center">'
+            + '<td>' + e.barcode + '</td>'
+            + '<td>'  + e.quantity + '</td>'
+            + '</tr>';
+        }
         $tbody.append(row);
 	}
 }

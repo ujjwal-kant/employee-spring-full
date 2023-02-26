@@ -16,8 +16,8 @@ import com.increff.employee.pojo.InventoryPojo;
 public class InventoryDao extends AbstractDao {
 
 	
-    private String SELECT_ALL = "select i from InventoryPojo i";
-    private String SELECT_PRODUCTID= "select i from InventoryPojo i where productId=:productId";
+    private static final String SELECT_ALL = "select i from InventoryPojo i";
+    private static final String SELECT_PRODUCTID= "select i from InventoryPojo i where productId=:productId";
 	// private String SELECT_BY_BARCODE= "select i from InventoryPojo i where barcode=:barcode";
 
 	@PersistenceContext
