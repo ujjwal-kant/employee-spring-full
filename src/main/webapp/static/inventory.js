@@ -159,6 +159,7 @@ var processCount = 0;
 
 function processData(){
 	var file = $('#inventoryFile')[0].files[0];
+	console.log(file);
 	if(!file)
     {
         ErrorMessage("Please select a file")
@@ -296,8 +297,10 @@ function updateUploadDialog(){
 
 function updateFileName(){
 	var $file = $('#inventoryFile');
-	var fileName = $file.val();
+	// var fileName = $file.val();
+	var fileName = document.getElementById("inventoryFile").files[0].name;
 	$('#inventoryFileName').html(fileName);
+	
 	fileData = [];
     errorData = [];
     processCount = 0;

@@ -11,8 +11,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.increff.employee.dto.AdminDto;
-import com.increff.employee.model.InfoData;
-import com.increff.employee.model.UserForm;
+import com.increff.employee.model.data.InfoData;
+import com.increff.employee.model.form.UserForm;
 import com.increff.employee.service.ApiException;
 
 import io.swagger.annotations.ApiOperation;

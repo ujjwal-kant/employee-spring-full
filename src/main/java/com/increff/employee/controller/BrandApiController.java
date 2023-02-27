@@ -10,8 +10,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.increff.employee.dto.BrandDto;
-import com.increff.employee.model.BrandData;
-import com.increff.employee.model.BrandForm;
+import com.increff.employee.model.data.BrandData;
+import com.increff.employee.model.form.BrandForm;
 import com.increff.employee.pojo.BrandPojo;
 import com.increff.employee.service.ApiException;
 
@@ -28,7 +28,7 @@ public class BrandApiController{
 
 	@ApiOperation(value = "Adds a Brand and Category")
 	@RequestMapping(path = "", method = RequestMethod.POST)
-	public BrandPojo addBrandCategory(@RequestBody BrandForm form) throws ApiException {
+	public BrandData addBrandCategory(@RequestBody BrandForm form) throws ApiException {
 		return branddto.addBrandCategory(form);
 	}
 
@@ -46,7 +46,7 @@ public class BrandApiController{
 
 	@ApiOperation(value = "Updates a Brand")
 	@RequestMapping(path = "/{id}", method = RequestMethod.PUT)
-	public BrandPojo updateBrandCategory(@PathVariable Integer id, @RequestBody BrandForm form) throws ApiException {
+	public BrandData updateBrandCategory(@PathVariable Integer id, @RequestBody BrandForm form) throws ApiException {
 		 return branddto.updateBrandCategory(id,form);
 	}
 

@@ -1,7 +1,7 @@
 package com.increff.employee.util;
 
-import com.increff.employee.model.BrandForm;
-import com.increff.employee.model.ProductForm;
+import com.increff.employee.model.form.BrandForm;
+import com.increff.employee.model.form.ProductForm;
 
 public class HelperUtil {
 

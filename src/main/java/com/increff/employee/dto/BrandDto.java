@@ -8,8 +8,8 @@ import javax.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import com.increff.employee.model.BrandData;
-import com.increff.employee.model.BrandForm;
+import com.increff.employee.model.data.BrandData;
+import com.increff.employee.model.form.BrandForm;
 import com.increff.employee.pojo.BrandPojo;
 import com.increff.employee.service.ApiException;
 import com.increff.employee.service.BrandService;
@@ -25,20 +25,21 @@ public class BrandDto {
     private BrandService brandService;
 
     @Transactional(rollbackOn = ApiException.class)
-    public BrandPojo addBrandCategory(BrandForm form) throws ApiException {
+    public BrandData addBrandCategory(BrandForm form) throws ApiException {
         NormaliseUtil.normalizeBrandCategory(form);
         ValidateUtil.validateBrandForm(form);
-        return brandService.addBrandCategory(ConversionUtil.getBrandPojo(form));
+        BrandPojo brandPojo = brandService.addBrandCategory(ConversionUtil.getBrandPojo(form));
+        return ConversionUtil.getBrandData(brandPojo);
     }
 
     @Transactional(rollbackOn = ApiException.class)
-    public BrandPojo updateBrandCategory(Integer id, BrandForm form) throws ApiException {
+    public BrandData updateBrandCategory(Integer id, BrandForm form) throws ApiException {
         NormaliseUtil.normalizeBrandCategory(form);
         ValidateUtil.validateBrandForm(form);
-        return brandService.updateBrandCategory(id,ConversionUtil.getBrandPojo(form));
+        BrandPojo brandPojo = brandService.updateBrandCategory(id,ConversionUtil.getBrandPojo(form));
+        return ConversionUtil.getBrandData(brandPojo);
     }
 
-    @Transactional
     public List<BrandData> getAllBrandCategory() {
         List<BrandPojo>list1= brandService.getAllBrandCategory();
         List<BrandData> list2 = new ArrayList<BrandData>();
@@ -48,7 +49,6 @@ public class BrandDto {
 		return list2;
     }
 
-    @Transactional
     public BrandData getBrandCategoryById(Integer id) throws ApiException {
         BrandPojo brandPojo= brandService.getBrandCategorybyID(id);
         return ConversionUtil.getBrandData(brandPojo);

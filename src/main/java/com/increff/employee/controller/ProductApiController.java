@@ -11,8 +11,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.increff.employee.dto.ProductDto;
-import com.increff.employee.model.ProductData;
-import com.increff.employee.model.ProductForm;
+import com.increff.employee.model.data.ProductData;
+import com.increff.employee.model.form.ProductForm;
 import com.increff.employee.service.ApiException;
 
 import io.swagger.annotations.Api;

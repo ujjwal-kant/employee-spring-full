@@ -14,14 +14,14 @@ import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.sax.SAXResult;
 import javax.xml.transform.stream.StreamSource;
 
-//import com.increff.pos.model.PdfData;
-import com.increff.employee.model.PdfData;
 import org.apache.fop.apps.FOPException;
 import org.apache.fop.apps.FOUserAgent;
 import org.apache.fop.apps.Fop;
 import org.apache.fop.apps.FopFactory;
 import org.apache.fop.apps.MimeConstants;
 import org.springframework.stereotype.Service;
+
+import com.increff.employee.model.data.PdfData;
 
 @Service
 public class PDF_Generator {

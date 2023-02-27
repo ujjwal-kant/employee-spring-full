@@ -2,10 +2,10 @@ package com.increff.employee.util;
 
 import java.util.List;
 
-import com.increff.employee.model.BrandForm;
-import com.increff.employee.model.InventoryForm;
-import com.increff.employee.model.OrderItemForm;
-import com.increff.employee.model.ProductForm;
+import com.increff.employee.model.form.BrandForm;
+import com.increff.employee.model.form.InventoryForm;
+import com.increff.employee.model.form.OrderItemForm;
+import com.increff.employee.model.form.ProductForm;
 import com.increff.employee.service.ApiException;
 
 public class ValidateUtil {

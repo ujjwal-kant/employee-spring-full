@@ -12,17 +12,17 @@ import com.increff.employee.pojo.InventoryPojo;
 
 
 @Service
+@Transactional(rollbackOn = ApiException.class)
 public class InventoryService {
 
 	@Autowired
 	private InventoryDao dao;
 
-	@Transactional(rollbackOn = ApiException.class)
-	public void add(InventoryPojo p) throws ApiException {
-		dao.insert(p);
+	public InventoryPojo add(InventoryPojo inventoryPojo) throws ApiException {
+		dao.insert(inventoryPojo);
+        return inventoryPojo;
 	}
     
-    @Transactional
 	public InventoryPojo getByProductId(Integer id) throws ApiException {
         InventoryPojo inventoryPojo = dao.selectByProductId(id);
         if(inventoryPojo == null) {
@@ -35,7 +35,6 @@ public class InventoryService {
 		return dao.selectAll();
 	}
 
-    @Transactional(rollbackOn = ApiException.class)
     public void initialize(Integer productId) throws ApiException {
         InventoryPojo inventoryPojo = new InventoryPojo();
         inventoryPojo.setQuantity(0);
@@ -43,7 +42,6 @@ public class InventoryService {
         dao.insert(inventoryPojo);
     }
 
-	@Transactional(rollbackOn = ApiException.class)
     public void reduce(String barcode, Integer productId, Integer quantity) throws ApiException {
         InventoryPojo inventoryPojo = getByProductId(productId);
         if (inventoryPojo.getQuantity() < quantity) {
@@ -53,7 +51,6 @@ public class InventoryService {
         dao.update(inventoryPojo);
     }
 
-    @Transactional(rollbackOn = ApiException.class)
     public void increase(Integer productId, Integer quantity) throws ApiException {
         InventoryPojo p = getByProductId(productId);
         p.setQuantity(p.getQuantity() + quantity);
@@ -65,7 +62,8 @@ public class InventoryService {
     //     return dao.selectByProductId(id);
     // }
 
-    public void update(InventoryPojo old) {
+    public InventoryPojo update(InventoryPojo old) {
         dao.update(old);
+        return old;
     }
 }

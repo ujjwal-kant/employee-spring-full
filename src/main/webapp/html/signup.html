@@ -11,13 +11,16 @@
 
 
 <div class="container">
-<!-- 
-<div class="row">
+
+<div class="row justify-content-center">
+
 <div class="col-6">
 	
 	<div class="card">
   	<div class="card-header">
-    	Sign up
+    	<div class="col">
+			Sign up
+		</div>
   	</div>
   	<div class="card-body">
 		<form class="form" id="init-form" method="POST" th:action="@{/session/signup}">
@@ -33,12 +36,12 @@
 					<input type="password" class="form-control" name="password" id="password" placeholder="password" required>
 				</div>
 			</div>
-			<div class="form-group">
+			<!-- <div class="form-group">
 				<label for="confirm-password" class="col-sm-10 col-form-label">Confirm Password</label>
 				<div class="col">
 					<input type="password" class="form-control" name="confirmPassword" id="confirm-password"  placeholder="password" required>
 				</div>
-			</div>
+			</div> -->
 				<button type="submit" class="btn btn-outline-primary" id="login">Sign up</button>
 		</form>
 	</div>
@@ -50,75 +53,10 @@
 	
 	
 
-</div> Col -->
-<!-- </div> -->
+</div> 
+ </div> 
 
-<section class="vh-100">
-	<div class="container py-5 h-100">
-	  <div class="row d-flex align-items-center justify-content-center h-100">
-		<div class="col-md-8 col-lg-7 col-xl-6">
-		  <img src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-login-form/draw2.svg"
-			class="img-fluid" alt="Phone image">
-		</div>
-		<div class="col-md-7 col-lg-5 col-xl-5 offset-xl-1">
-		  <form id="init-form" method="POST" th:action="@{/session/signup}">
-			<!-- Email input -->
-
-			<!-- <div class="form-group">
-				<label for="email" class="col-sm-10 col-form-label">Email</label>
-				<div class="col">
-					<input class="form-control" name="email" id="email" placeholder="enter email" required>
-				</div>
-			</div> -->
-			
-			<div class="form-outline mb-4">
-			  <input type="text" id="email" name="email" class="form-control form-control-lg" placeholder="enter email" required/>
-			  <label class="form-label" for="email">Email address</label>
-			</div>
-
-			<!-- <div class="form-group">
-				<label for="password" class="col-sm-10 col-form-label">Password</label>
-				<div class="col">
-					<input type="password" class="form-control" name="password" id="password" placeholder="password" required>
-				</div>
-			</div> -->
-  
-			<!-- Password input -->
-			<div class="form-outline mb-4">
-			  <input type="password" id="password" name="password" class="form-control form-control-lg" placeholder="password" required/>
-			  <label class="form-label" for="password">Password</label>
-			</div>
-
-			<!-- <div class="form-group">
-				<label for="confirm-password" class="col-sm-10 col-form-label">Confirm Password</label>
-				<div class="col">
-					<input type="password" class="form-control" name="confirmPassword" id="confirm-password"  placeholder="password" required>
-				</div>
-			</div> -->
-
-			<div class="form-outline mb-4">
-				<input type="password" id="confirm-password" name="confirmPassword" class="form-control form-control-lg" placeholder="password" required/>
-				<label class="form-label" for="confirm-password">Confirm Password</label>
-			  </div>
-  
-			<div class="d-flex justify-content-around align-items-center mb-4">
-			  <!-- Checkbox -->
-			  <div class="form-check">
-				<input class="form-check-input" type="checkbox" value="" id="form1Example3" checked />
-				<label class="form-check-label" for="form1Example3"> Remember me </label>
-			  </div>
-			  <a href="#!">Forgot password?</a>
-			</div>
-  
-			<!-- Submit button -->
-			<button type="submit" class="btn btn-primary btn-lg btn-block" id="login">Sign in</button>
-
-  
-		  </form>
-		</div>
-	  </div>
-	</div>
-  </section>
+<!--  -->
 
 </div> <!-- Container-->
 

@@ -1,8 +1,8 @@
 package com.increff.employee.util.Invoice1;
 
-//import lombok.Setter;
-import com.increff.employee.model.PdfData;
-import com.increff.employee.model.PdfListData;
+import com.increff.employee.model.data.PdfData;
+import com.increff.employee.model.data.PdfListData;
+
 import org.springframework.stereotype.Service;
 import org.w3c.dom.Attr;
 import org.w3c.dom.Document;
@@ -115,8 +115,14 @@ public class JavaToXML {
 
             }
 
+            // System.out.println(d.getTotal());
+            double val = d.getTotal();
+            val = val*100;
+            val = Math.round(val);
+            val = val /100;
+
             Element total = document.createElement("total");
-            total.appendChild(document.createTextNode(""+d.getTotal()));
+            total.appendChild(document.createTextNode(""+val));
             root.appendChild(total);
 
 

@@ -8,8 +8,8 @@ import javax.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import com.increff.employee.model.ProductData;
-import com.increff.employee.model.ProductForm;
+import com.increff.employee.model.data.ProductData;
+import com.increff.employee.model.form.ProductForm;
 import com.increff.employee.pojo.BrandPojo;
 import com.increff.employee.pojo.ProductPojo;
 import com.increff.employee.service.ApiException;
@@ -34,7 +34,7 @@ public class ProductDto {
     private InventoryService inventoryService;
 
     @Transactional(rollbackOn = ApiException.class)
-    public void add(ProductForm form) throws ApiException {
+    public ProductData add(ProductForm form) throws ApiException {
         NormaliseUtil.normalizeProduct(form);    
         ValidateUtil.validateProductForm(form);
 
@@ -43,16 +43,15 @@ public class ProductDto {
         productService.checkIfBarcodeExists(productPojo.getBarcode());
         productService.add(productPojo);
         inventoryService.initialize(productPojo.getId());
+        return ConversionUtil.getProductData(productPojo,form.getBrand(),form.getCategory());
     }
 
-    @Transactional
     public ProductData getProductByID(Integer id) throws ApiException {
 		ProductPojo productPojo=productService.getIfExists(id);
         BrandPojo brandPojo = brandService.getBrandCategorybyID(productPojo.getBrand_category_id());
         return ConversionUtil.getProductData(productPojo, brandPojo.getBrand(), brandPojo.getCategory());
     }
 
-    @Transactional(rollbackOn = ApiException.class)
     public List<ProductData> getAllProduct() throws ApiException {
         List<ProductPojo>list1= productService.getAllProduct();
         List<ProductData> list2 = new ArrayList<ProductData>();
@@ -64,15 +63,15 @@ public class ProductDto {
     }
 
     @Transactional(rollbackOn = ApiException.class)
-    public void update(Integer id, ProductForm form) throws ApiException {
+    public ProductData update(Integer id, ProductForm form) throws ApiException {
         ValidateUtil.validateProductForm(form);
         NormaliseUtil.normalizeProduct(form);
         BrandPojo brandPojo = brandService.getIfBrandAndCategoryExists(form.getBrand(), form.getCategory());
         ProductPojo productPojo = ConversionUtil.getProductPojo(form, brandPojo.getId());
         productService.update(id,productPojo);
+        return ConversionUtil.getProductData(productPojo,form.getBrand(),form.getCategory());
     }
 
-    @Transactional
     public List<ProductData> searchByProductNameAndBarcode(ProductForm form) throws ApiException {
         HelperUtil.setProductForm(form);
         List<ProductPojo> list1 = productService.serachByProductNameAndBarcode(form.getBarcode(),form.getName());
@@ -84,5 +83,4 @@ public class ProductDto {
 		}
 		return list2;
     }
-    
 }

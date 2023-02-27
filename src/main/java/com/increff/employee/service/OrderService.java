@@ -15,18 +15,17 @@ import com.increff.employee.pojo.OrderPojo;
 
 
 @Service
+@Transactional(rollbackOn = ApiException.class)
 public class OrderService {
 
     @Autowired
     private OrderDao dao;
 
-    @Transactional(rollbackOn = ApiException.class)
     public OrderPojo createNewOrder() {
         OrderPojo orderPojo = new OrderPojo();
         return dao.insert(orderPojo);
     }
 
-    @Transactional
     public OrderPojo getById(Integer id) throws ApiException {
         OrderPojo orderPojo = dao.getById(id);
         if (orderPojo == null) {
@@ -34,8 +33,7 @@ public class OrderService {
         }
         return orderPojo;
     }
-
-    @Transactional(rollbackOn = ApiException.class)
+    
     public void update(int id,LocalDateTime time) throws ApiException {
         OrderPojo ex = getById(id);
         ex.setIsInvoiceCreated(true);
@@ -53,7 +51,7 @@ public class OrderService {
         return dao.selectAllBetween(startingDate1, endingDate1);
     }
 
-    @Transactional(rollbackOn = ApiException.class)
+    
     public void setInvoiceDownloaded(Integer id) throws ApiException {
         OrderPojo orderPojo = getById(id);
         orderPojo.setIsInvoiceCreated(true);

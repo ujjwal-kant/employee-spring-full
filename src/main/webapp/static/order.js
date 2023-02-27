@@ -225,6 +225,7 @@ function addItem(item) {
       return ;
     }
     orderItems.push(item);
+    mapbarcodequantity[item.barcode]-=item.quantity;
   } 
   else if (orderItems[index].sellingPrice == item.sellingPrice) {
     if (mapbarcodequantity[item.barcode] < item.quantity) {
@@ -232,6 +233,7 @@ function addItem(item) {
       return;
     }
     orderItems[index].quantity += item.quantity;
+    mapbarcodequantity[item.barcode]-=item.quantity;
   } 
   else {
     if(mapbarcodesellingPrice[item.barcode]<item.sellingPrice){
@@ -253,8 +255,16 @@ function calculateTotalPrice() {
 }
 
 function deleteOrderItem(barcode) {
+  console.log(barcode);
   const index = orderItems.findIndex((it) => it.barcode === barcode.toString());
+  console.log(index);
+
   if (index == -1) return;
+
+  console.log(mapbarcodequantity[item.barcode]);
+  mapbarcodequantity[item.barcode]+=item.quantity;
+  console.log(mapbarcodequantity[item.barcode]);
+
   orderItems.splice(index, 1);
   displayCreateOrderItems(orderItems, calculateTotalPrice());
 }
@@ -276,8 +286,17 @@ function addEditOrderItem() {
   $("#edit-order-item-form").trigger("reset");
 }
 
-function deleteEditOrderItem(barcode) {
+function deleteEditOrderItem(barcode,quantity) {
+  console.log(barcode);
   const index = orderItems.findIndex((it) => it.barcode === barcode.toString());
+  console.log(index);
+
+  if (index == -1) return;
+
+  console.log(mapbarcodequantity[barcode]);
+  mapbarcodequantity[barcode]+=quantity;
+  console.log(mapbarcodequantity[barcode]);
+
   if (index == -1) return;
   orderItems.splice(index, 1);
   displayEditOrder(orderItems, calculateTotalPrice());
@@ -375,7 +394,7 @@ function displayEditOrder(data, total = 0) {
                    <td class="barcode text-center">${e.quantity}</td>
                    <td class="barcode text-center">${e.sellingPrice.toFixed(2)}</td>
                    <td class="text-center">
-                     <button type="button" onclick="deleteEditOrderItem('${e.barcode}')" 
+                     <button type="button" onclick="deleteEditOrderItem('${e.barcode}','${e.quantity}')" 
                           data-placement="bottom" title="Delete" class="btn btn-dark">
                           ${Delete_item}
                       </button>

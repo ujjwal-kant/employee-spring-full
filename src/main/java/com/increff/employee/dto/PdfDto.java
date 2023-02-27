@@ -6,6 +6,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Base64;
 import java.util.Date;
@@ -21,8 +22,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.increff.employee.model.PdfData;
-import com.increff.employee.model.PdfListData;
+import com.increff.employee.model.data.PdfData;
+import com.increff.employee.model.data.PdfListData;
 import com.increff.employee.pojo.OrderItemPojo;
 import com.increff.employee.pojo.ProductPojo;
 import com.increff.employee.service.ApiException;
@@ -58,15 +59,23 @@ public class PdfDto {
             ProductPojo productPojo = productService.get(orderItemPojo.getProductId());
             total +=convertOrderItemPojoToPdfData(orderItemPojo,pdfListData,pdfData,c,productPojo);
         }
-        // DateTimeFormatter date = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-        // String formattedDate = LocalDateTime.now().format(date);
-        // DateTimeFormatter time = DateTimeFormatter.ofPattern("HH:mm:ss");
-        // String formattedTime = LocalDateTime.now().format(time);
-        pdfData.setInvoiceTime("");
-        pdfData.setInvoiceDate("");
+        DateTimeFormatter date = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        String formattedDate = LocalDateTime.now().format(date);
+        DateTimeFormatter time = DateTimeFormatter.ofPattern("HH:mm:ss");
+        String formattedTime = LocalDateTime.now().format(time);
+        pdfData.setInvoiceTime(formattedDate);
+        pdfData.setInvoiceDate(formattedTime);
         pdfData.setOrderId(id);
-        pdfData.setTotal(total);
+
+        double val = total;
+        val = val*100;
+        val = Math.round(val);
+        val = val /100;
+
+        pdfData.setTotal(val);
+        System.out.println(val);
         pdfData.setItemList(pdfListData);
+
         // DateTimeFormatter date = DateTimeFormatter.ofPattern("yyyy-MM-dd");
         // String formattedDate = LocalDateTime.now().format(date);
         // DateTimeFormatter time = DateTimeFormatter.ofPattern("HH:mm:ss");
@@ -104,7 +113,7 @@ public class PdfDto {
         Double v = orderItemPojo.getQuantity() * orderItemPojo.getSellingPrice();
         pdfListData.setAmount(v);
         list.add(pdfListData);
-        return v;
+        return v ;
     }
 
     public ResponseEntity<byte[]> download(int id) throws ApiException, IOException {

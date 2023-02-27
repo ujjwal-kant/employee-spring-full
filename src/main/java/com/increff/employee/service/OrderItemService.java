@@ -14,10 +14,12 @@ import com.increff.employee.pojo.OrderPojo;
 
 
 @Service
+@Transactional(rollbackOn = ApiException.class)
 public class OrderItemService {
 
     @Autowired
     private OrderItemDao dao;
+
     @Autowired
     private OrderService orderService;
 
@@ -25,7 +27,6 @@ public class OrderItemService {
         return dao.selectByOrderId(orderId);
     }
 
-    @Transactional(rollbackOn = ApiException.class)
     public void deleteByOrderId(Integer orderId) {
         dao.deleteByOrderId(orderId);
     }
@@ -47,9 +48,9 @@ public class OrderItemService {
         return orderItemPojoList;
     }
 
-    @Transactional
-    public void insert(OrderItemPojo orderItemPojo) {
+    public OrderItemPojo insert(OrderItemPojo orderItemPojo) {
         dao.insert(orderItemPojo);
+        return orderItemPojo;
     }
 
     // public List<OrderItemPojo> getByOrderId(int orderId) {

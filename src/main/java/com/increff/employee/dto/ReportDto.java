@@ -10,12 +10,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
-import com.increff.employee.model.BrandData;
-import com.increff.employee.model.DailySalesReportData;
-import com.increff.employee.model.ProductData;
-import com.increff.employee.model.ReportInventoryData;
-import com.increff.employee.model.SalesReportData;
-import com.increff.employee.model.SalesReportForm;
+import com.increff.employee.model.data.BrandData;
+import com.increff.employee.model.data.DailySalesReportData;
+import com.increff.employee.model.data.ProductData;
+import com.increff.employee.model.data.ReportInventoryData;
+import com.increff.employee.model.data.SalesReportData;
+import com.increff.employee.model.form.SalesReportForm;
 import com.increff.employee.pojo.BrandPojo;
 import com.increff.employee.pojo.DailyReportSalesPojo;
 import com.increff.employee.pojo.OrderItemPojo;

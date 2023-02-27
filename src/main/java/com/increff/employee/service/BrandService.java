@@ -9,17 +9,17 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.increff.employee.dao.BrandDao;
-import com.increff.employee.model.BrandData;
+import com.increff.employee.model.data.BrandData;
 import com.increff.employee.pojo.BrandPojo;
 import com.increff.employee.util.ConversionUtil;
 
 @Service
+@Transactional(rollbackOn = ApiException.class)
 public class BrandService {
 
 	@Autowired
 	private BrandDao dao;
 
-	@Transactional(rollbackOn = ApiException.class)
 	public BrandPojo addBrandCategory(BrandPojo brandPojo) throws ApiException {
 		checkIfBrandAndCategoryExists(brandPojo.getBrand(), brandPojo.getCategory());
 		dao.insert(brandPojo);
@@ -34,7 +34,6 @@ public class BrandService {
 		}
 	}
 
-	@Transactional(rollbackOn = ApiException.class)
 	public BrandPojo getBrandCategorybyID(Integer id) throws ApiException {
 		BrandPojo brandPojo= getIfExists(id);
 		return brandPojo;
@@ -60,7 +59,6 @@ public class BrandService {
         return brandPojoList;
     }
 
-	@Transactional
 	public List<BrandPojo> getAllBrandCategory() {
 		List<BrandPojo>list1= dao.selectAll();
 		return list1;
@@ -91,7 +89,6 @@ public class BrandService {
 	// 	return ConversionUtil.getBrandData(b);
 	// }
 
-	@Transactional(rollbackOn  = ApiException.class)
 	public BrandPojo updateBrandCategory(Integer id, BrandPojo brandPojo) throws ApiException {
 		BrandPojo ex = getIfExists(id);
 		
@@ -106,7 +103,6 @@ public class BrandService {
 		return ex;
 	}
 
-	@Transactional
 	public BrandPojo getIfBrandAndCategoryExists(String brand, String category) throws ApiException {
         BrandPojo b = dao.selectBrandCategory(brand, category);
         if (b == null) {

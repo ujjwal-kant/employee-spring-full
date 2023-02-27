@@ -12,9 +12,9 @@ import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.increff.employee.helper.TestUtils;
-import com.increff.employee.model.OrderData;
-import com.increff.employee.model.OrderDetailData;
-import com.increff.employee.model.OrderItemForm;
+import com.increff.employee.model.data.OrderData;
+import com.increff.employee.model.data.OrderDetailData;
+import com.increff.employee.model.form.OrderItemForm;
 import com.increff.employee.pojo.BrandPojo;
 import com.increff.employee.pojo.InventoryPojo;
 import com.increff.employee.pojo.ProductPojo;

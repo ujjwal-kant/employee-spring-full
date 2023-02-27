@@ -1,6 +1,19 @@
 package com.increff.employee.util;
 
 import com.increff.employee.model.*;
+import com.increff.employee.model.data.BrandData;
+import com.increff.employee.model.data.DailySalesReportData;
+import com.increff.employee.model.data.InventoryData;
+import com.increff.employee.model.data.OrderData;
+import com.increff.employee.model.data.OrderDetailData;
+import com.increff.employee.model.data.OrderItemData;
+import com.increff.employee.model.data.ProductData;
+import com.increff.employee.model.data.UserData;
+import com.increff.employee.model.form.BrandForm;
+import com.increff.employee.model.form.InventoryForm;
+import com.increff.employee.model.form.OrderItemForm;
+import com.increff.employee.model.form.ProductForm;
+import com.increff.employee.model.form.UserForm;
 import com.increff.employee.pojo.*;
 
 import java.util.List;

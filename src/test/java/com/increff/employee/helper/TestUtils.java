@@ -3,7 +3,7 @@ package com.increff.employee.helper;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.increff.employee.model.OrderItemForm;
+import com.increff.employee.model.form.OrderItemForm;
 
 public class TestUtils {
     public static List<OrderItemForm> getOrderItemArray(List<String>barcodes,List<Integer>quantities, List<Double>sellingPrices) {

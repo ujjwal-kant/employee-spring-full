@@ -8,8 +8,8 @@ import javax.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import com.increff.employee.model.InventoryData;
-import com.increff.employee.model.InventoryForm;
+import com.increff.employee.model.data.InventoryData;
+import com.increff.employee.model.form.InventoryForm;
 import com.increff.employee.pojo.InventoryPojo;
 import com.increff.employee.pojo.ProductPojo;
 import com.increff.employee.service.ApiException;
@@ -52,7 +52,6 @@ public class InventoryDto {
 		return ConversionUtil.getInventoryData(old,productPojo.getName(), productPojo.getBarcode());
     }
 
-
     @Transactional(rollbackOn = ApiException.class)
     public InventoryData addOnInventory(InventoryForm inventoryForm) throws ApiException {
         NormaliseUtil.normalizeInventory(inventoryForm);
@@ -67,6 +66,7 @@ public class InventoryDto {
 		return ConversionUtil.getInventoryData(old,productPojo.getName(), productPojo.getBarcode());
     }
 
+    @Transactional(rollbackOn = ApiException.class)
     public InventoryData getInventoryByBarcode(String barcode) throws ApiException {
         ProductPojo productPojo = productService.getByBarcode(barcode);
         InventoryPojo inventoryPojo = inventoryService.getByProductId(productPojo.getId());

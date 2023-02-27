@@ -8,9 +8,9 @@ import java.util.List;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import com.increff.employee.model.BrandForm;
-import com.increff.employee.model.ProductData;
-import com.increff.employee.model.ProductForm;
+import com.increff.employee.model.data.ProductData;
+import com.increff.employee.model.form.BrandForm;
+import com.increff.employee.model.form.ProductForm;
 import com.increff.employee.pojo.ProductPojo;
 import com.increff.employee.service.AbstractUnitTest;
 import com.increff.employee.service.ApiException;

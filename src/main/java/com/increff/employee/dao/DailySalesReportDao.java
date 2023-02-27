@@ -3,6 +3,7 @@ package com.increff.employee.dao;
 import org.springframework.stereotype.Repository;
 
 import com.increff.employee.pojo.DailyReportSalesPojo;
+import com.increff.employee.service.ApiException;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -13,6 +14,7 @@ import java.util.List;
 
 
 @Repository
+@Transactional(rollbackOn  = ApiException.class)
 public class DailySalesReportDao extends AbstractDao {
 
     private static final String select_all = "select p from DailyReportSalesPojo p";

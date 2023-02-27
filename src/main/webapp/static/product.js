@@ -249,7 +249,10 @@ function search(event)
 		 'Content-Type': 'application/json'
 		},
 		success: function(response) {
-			 displayProductList(response);
+			 
+			 $('.datatable').DataTable().destroy();
+			 displayProductList(response); 
+			pagination();
 		},
 		error: handleAjaxError
 	 });
@@ -364,6 +367,7 @@ function processData(){
 
 function readFileDataCallback(results){
 	fileData = results.data;
+	var headers = results.meta;
 	if(headers.fields.length!=5) {
         var row = {};
         row.error="Number of coloumns do not match!";
@@ -392,6 +396,7 @@ function uploadRows(){
 	updateUploadDialog();
 	//If everything processed then return
 	if(processCount==fileData.length){
+		getProductList();
 		return;
 	}
 	
@@ -500,7 +505,8 @@ function updateUploadDialog(){
 
 function updateFileName(){
 	var $file = $('#productFile');
-	var fileName = $file.val();
+	// var fileName = $file.val();
+	var fileName = document.getElementById("productFile").files[0].name;
 	$('#productFileName').html(fileName);
 	fileData = [];
     errorData = [];
@@ -544,7 +550,7 @@ function init(){
 	$('#add-product').click(displayProductData);
 	$('#inputBrand').change(brandChanged);
     $('#inputCategory').change(categoryChanged);
-    $('#ProductFile').on('change', updateFileName)
+    $('#productFile').on('change', updateFileName)
 }
 
 $(document).ready(init);

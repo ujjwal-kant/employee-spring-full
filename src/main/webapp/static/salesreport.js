@@ -62,6 +62,8 @@ function getSalesReportUrl(){
          'Content-Type': 'application/json'
         },
         success: function(response) {
+            
+		$('.datatable').DataTable().destroy();
              displaySalesReport(response);
              pagination(); 
         },
@@ -71,7 +73,7 @@ function getSalesReportUrl(){
  
 
 //  var lastday=
- var data1={};
+ var data1;
  function displaySalesReport(data) {
      var $tbody = $('#sales-table').find('tbody');
      $tbody.empty();
@@ -84,17 +86,21 @@ function getSalesReportUrl(){
      {
          $('#sales-table').show()
      }
+    //  console.log(data);
+     data1=data;
+    //  console.log(data1);
      for(var i in data){
          let srNo = Number.parseInt(i) + 1
          var b = data[i];
          var row = '<tr>'
-         + '<td>'+srNo+'</td>'
+         + '<td>' + srNo+'</td>'
          + '<td>' + b.brand + '</td>'
          + '<td>' + b.category + '</td>'
          + '<td>' + b.quantity + '</td>'
          + '<td>' + b.revenue.toFixed(2) + '</td>'
          + '</tr>';
          $tbody.append(row);
+
      }
  }
  
@@ -116,17 +122,8 @@ function getSalesReportUrl(){
  }
 
  function downloadcsvfile(){
-	var url = getSalesReportUrl();
-	$.ajax({
-		url: url,
-		type: 'GET',
-		success: function(data) {
-			helper(data);
-		},
-		error: function() {
-			console.log("Error");
-		},
-	});
+	helper(data1);
+    console.log(data1);
 }
 
 function helper(data){

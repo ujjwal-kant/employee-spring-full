@@ -10,9 +10,9 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.increff.employee.dto.OrderDto;
-import com.increff.employee.model.OrderData;
-import com.increff.employee.model.OrderDetailData;
-import com.increff.employee.model.OrderItemForm;
+import com.increff.employee.model.data.OrderData;
+import com.increff.employee.model.data.OrderDetailData;
+import com.increff.employee.model.form.OrderItemForm;
 import com.increff.employee.service.ApiException;
 
 import io.swagger.annotations.Api;

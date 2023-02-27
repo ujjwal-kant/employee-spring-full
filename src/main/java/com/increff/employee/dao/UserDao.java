@@ -9,8 +9,10 @@ import javax.transaction.Transactional;
 import org.springframework.stereotype.Repository;
 
 import com.increff.employee.pojo.UserPojo;
+import com.increff.employee.service.ApiException;
 
 @Repository
+@Transactional(rollbackOn  = ApiException.class)
 public class UserDao extends AbstractDao {
 
 	private static final String DELETE_ID = "delete from UserPojo p where id=:id";

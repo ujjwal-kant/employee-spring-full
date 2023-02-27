@@ -12,6 +12,8 @@ function getDailySalesReportUrl(){
          'Content-Type': 'application/json'
         },
         success: function(response) {
+            
+		$('.datatable').DataTable().destroy();
              displayDailySalesReport(response);
              pagination();
         },
@@ -19,10 +21,11 @@ function getDailySalesReportUrl(){
      });
  }
  
+ var data1={};
  function displayDailySalesReport(data) {
      var $tbody = $('#daily-sales-table').find('tbody');
      $tbody.empty();
-     for(let i=data.length-1; i>=0; i--){
+     for(var i in data){
          var b = data[i];
          console.log(b);
          var row = '<tr class="text-center">'
@@ -32,6 +35,7 @@ function getDailySalesReportUrl(){
          + '<td class="text-right">' + b.totalRevenue.toFixed(2) + '</td>'
          + '</tr>';
          $tbody.append(row);
+
      }
  }
 
@@ -42,13 +46,7 @@ function getDailySalesReportUrl(){
       "/" +
       (date.getMonth() + 1) +
       "/" +
-      date.getFullYear() +
-      " " +
-      date.getHours() +
-      ":" +
-      date.getMinutes() +
-      ":" +
-      date.getSeconds()
+      date.getFullYear() 
     );
   }
 

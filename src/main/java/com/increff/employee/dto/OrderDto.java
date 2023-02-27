@@ -10,10 +10,10 @@ import javax.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import com.increff.employee.model.OrderData;
-import com.increff.employee.model.OrderDetailData;
-import com.increff.employee.model.OrderItemData;
-import com.increff.employee.model.OrderItemForm;
+import com.increff.employee.model.data.OrderData;
+import com.increff.employee.model.data.OrderDetailData;
+import com.increff.employee.model.data.OrderItemData;
+import com.increff.employee.model.form.OrderItemForm;
 import com.increff.employee.pojo.OrderItemPojo;
 import com.increff.employee.pojo.OrderPojo;
 import com.increff.employee.pojo.ProductPojo;
@@ -31,10 +31,13 @@ public class OrderDto {
 
     @Autowired
     private OrderService orderService;
+
     @Autowired
     private ProductService productService;
+
     @Autowired
     private InventoryService inventoryService;
+
     @Autowired
     private OrderItemService orderItemService;
 
@@ -53,7 +56,6 @@ public class OrderDto {
         return orderDetailData;
     }
 
-    @Transactional(rollbackOn = ApiException.class)
     public void updateInventory(Integer orderId, List<OrderItemForm> orderItemFormList,List<OrderItemPojo> orderItemPojoList, List<OrderItemData> orderItemDataList) throws ApiException {
         for (OrderItemForm orderItemForm : orderItemFormList) {
             ProductPojo productPojo = productService.getByBarcode(orderItemForm.getBarcode());
@@ -69,6 +71,7 @@ public class OrderDto {
         }
     }
 
+    @Transactional(rollbackOn = ApiException.class)
     public OrderDetailData getOrderDetails(int orderId) throws ApiException {
         OrderPojo orderPojo = orderService.getById(orderId);
         List<OrderItemPojo> orderItemPojo = orderItemService.get(orderId);
@@ -93,7 +96,7 @@ public class OrderDto {
     }
 
     @Transactional(rollbackOn = ApiException.class)
-    public void updateOrder(Integer orderId, List<OrderItemForm> orderItemForms) throws ApiException {
+    public List<OrderItemData> updateOrder(Integer orderId, List<OrderItemForm> orderItemForms) throws ApiException {
         ValidateUtil.validateOrderForm(orderItemForms);
         NormaliseUtil.normalizeOrderItem(orderItemForms);
         revertInventory(orderId);
@@ -105,9 +108,9 @@ public class OrderDto {
         List<OrderItemData> orderItemDataList = new ArrayList<>();
         updateInventory(orderPojo.getId(), orderItemForms, orderItemPojolist, orderItemDataList);
         // return orderItemPojolist;
+        return orderItemDataList;
     }
 
-    @Transactional(rollbackOn = ApiException.class)
     public void revertInventory(int orderId) throws ApiException {
         List<OrderItemPojo> orderItemPojoList = orderItemService.get(orderId);
         for (OrderItemPojo orderItemPojo : orderItemPojoList) {

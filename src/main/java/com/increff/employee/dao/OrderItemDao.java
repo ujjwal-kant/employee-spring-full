@@ -10,8 +10,10 @@ import javax.transaction.Transactional;
 import org.springframework.stereotype.Repository;
 
 import com.increff.employee.pojo.OrderItemPojo;
+import com.increff.employee.service.ApiException;
 
 @Repository
+@Transactional(rollbackOn  = ApiException.class)
 public class OrderItemDao extends AbstractDao {
 
     private static final String SELECT_ID= "select oi from OrderItemPojo oi where orderId=:orderId";

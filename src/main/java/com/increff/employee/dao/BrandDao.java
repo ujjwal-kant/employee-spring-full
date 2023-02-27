@@ -10,8 +10,10 @@ import javax.transaction.Transactional;
 import org.springframework.stereotype.Repository;
 
 import com.increff.employee.pojo.BrandPojo;
+import com.increff.employee.service.ApiException;
 
 @Repository
+@Transactional(rollbackOn  = ApiException.class)
 public class BrandDao extends AbstractDao {
 
 	private static final String DELETE_ID = "delete from BrandPojo p where id=:id";

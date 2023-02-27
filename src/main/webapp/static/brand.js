@@ -30,7 +30,10 @@ function search(event)
 		 'Content-Type': 'application/json'
 		},
 		success: function(response) {
+			 
+			 $('.datatable').DataTable().destroy();
 			 displayBrandList(response);
+			pagination();
 		},
 		error: handleAjaxError
 	 });
@@ -129,6 +132,7 @@ var processCount = 0;
 
 function processData(){
 	var file = $('#brandCategoryFile')[0].files[0];
+	console.log(file);
 	if(!file)
     {
         ErrorMessage("Please select a file")
@@ -192,11 +196,9 @@ function uploadRows(){
 	   		uploadRows();  
 	   },
 	   error: function(response){
-		var data = JSON.parse(response.responseText);
-		row.error=data["message"];
-		   row.error_in_row_no = processCount
-		   errorData.push(row);
-		   uploadRows();
+		row.error=response.responseText
+		errorData.push(row);
+		uploadRows();
 	   }
 	});
     
@@ -290,7 +292,10 @@ function updateUploadDialog(){
 
 function updateFileName(){
 	var $file = $('#brandCategoryFile');
-	var fileName = $file.val();
+	// var fileName = $file.val();
+	// console.log($file.val());
+	var fileName = document.getElementById("brandCategoryFile").files[0].name;
+	console.log("hello");
 	$('#brandCategoryFileName').html(fileName);
 	fileData = [];
     errorData = [];
@@ -338,7 +343,7 @@ function init(){
 	$('#add-brand').click(displayAddData);
 	$('#process-data').click(processData);
 	$('#download-errors').click(downloadErrors);
-    $('#BrandFile').on('change', updateFileName)
+    $('#brandFile').on('change', updateFileName)
 	
 }
 

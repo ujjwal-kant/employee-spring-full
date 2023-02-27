@@ -9,10 +9,10 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.increff.employee.dto.ReportDto;
-import com.increff.employee.model.DailySalesReportData;
-import com.increff.employee.model.ReportInventoryData;
-import com.increff.employee.model.SalesReportData;
-import com.increff.employee.model.SalesReportForm;
+import com.increff.employee.model.data.DailySalesReportData;
+import com.increff.employee.model.data.ReportInventoryData;
+import com.increff.employee.model.data.SalesReportData;
+import com.increff.employee.model.form.SalesReportForm;
 import com.increff.employee.service.ApiException;
 
 import io.swagger.annotations.Api;

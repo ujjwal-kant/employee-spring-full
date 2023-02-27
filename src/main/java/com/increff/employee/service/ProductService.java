@@ -11,33 +11,33 @@ import com.increff.employee.dao.ProductDao;
 import com.increff.employee.pojo.ProductPojo;
 
 @Service
+@Transactional(rollbackOn  = ApiException.class)
 public class ProductService {
 
 	@Autowired
 	private ProductDao dao;
 
-	@Transactional(rollbackOn = ApiException.class)
-	public void add(ProductPojo productPojo) throws ApiException {
+	public ProductPojo add(ProductPojo productPojo) throws ApiException {
 		dao.insert(productPojo);
+		return productPojo;
 	}
 
-	
 	public ProductPojo get(Integer id) throws ApiException {
 		return dao.select(id);
 	}
 
 	public List<ProductPojo> getAllProduct() throws ApiException {
-		List<ProductPojo> list1=dao.selectAll();
-		return list1;
+		List<ProductPojo> listOfAllProduct = dao.selectAll();
+		return listOfAllProduct;
 	}
 
-	@Transactional(rollbackOn  = ApiException.class)
-	public void update(Integer id, ProductPojo productPojo) throws ApiException {
+	public ProductPojo update(Integer id, ProductPojo productPojo) throws ApiException {
 		productPojo.setId(id);
 		ProductPojo old = getIfExists(id);
         old.setName(productPojo.getName());
         old.setMrp(productPojo.getMrp());
 		dao.update(old);
+		return old;
 	}
 
 	public ProductPojo getIfExists(Integer id) throws ApiException {
@@ -76,7 +76,6 @@ public class ProductService {
     }
 
     public List<ProductPojo> serachByProductNameAndBarcode(String barcode,String productName) throws ApiException {
-        List<ProductPojo> list1=dao.serachByProductNameAndBarcode(productName,barcode);
-		return list1;
+        return dao.serachByProductNameAndBarcode(productName,barcode);
     }
 }
