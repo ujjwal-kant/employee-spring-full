@@ -49,8 +49,23 @@ function getSalesReportUrl(){
      var $form = $("#sales-form");
      var json = toJson($form);
      let data = JSON.parse(json);
+
+     console.log(data);
+
+
+     if(data.startDate===''){
+        ErrorMessage('Enter a valid Start Date');
+        return;
+    }
+
+
+    if(data.endDate===''){
+        ErrorMessage('Enter a valid End date');
+        return;
+    }
+
      if(startDateGreaterThanEndDate(data.startDate,data.endDate)){
-         $.notify('Start Date should not be greater than End Date!',"error");
+         ErrorMessage('Start Date should not be greater than End Date!',"error");
          return;
      }
      var url = getSalesReportUrl();
@@ -204,15 +219,67 @@ function toCSV(json) {
  function startDateChanged(event){
      if( $('#inputEndDate').val()==="")
          $('#inputEndDate').attr('min',event.target.value)
+
+     const dateInput = document.getElementById("inputEndDate");
+     $('#inputEndDate').val("");
+     dateInput.setAttribute("min",event.target.value);
  }
  
  function endDateChanged(event){
      if( $('#inputStartDate').val()==="")
          $('#inputStartDate').attr('max',event.target.value)
  }
+
+ function readyDates() {
+    // Get references to the startDate and endDate inputs
+    const startDateInput = document.getElementById("inputStartDate");
+    const endDateInput = document.getElementById("inputEndDate");
+
+
+    //SETTING END DATE TO TODAY'S DATE
+    let today = new Date();
+    var year = today.getFullYear();
+    var month = (today.getMonth() + 1).toString().padStart(2, '0');
+    var day = today.getDate().toString().padStart(2, '0');
+    document.getElementById("inputEndDate").value = year + "-" + month + "-" + day;
+
+
+    //SETTING START DATE TO 30 DAYS AGO
+    today.setDate(today.getDate() - 30);
+    var year = today.getFullYear();
+    var month = (today.getMonth() + 1).toString().padStart(2, '0');
+    var day = today.getDate().toString().padStart(2, '0');
+    var thirtybefore = year + "-" + month + "-" + day;
+    document.getElementById("inputStartDate").value = thirtybefore;
+
+
+    // Get today's date
+    // const today = new Date();
+
+    // Set the minimum value for the startDate to be 30 days from today's date
+    startDateInput.min = new Date(today.getFullYear(), today.getMonth(), today.getDate()).toISOString().split("T")[0];
+    startDateInput.max = new Date(today.getFullYear(), today.getMonth(), today.getDate() + 30).toISOString().split("T")[0];
+    // Update the endDate's min and max values whenever the startDate value changes
+    startDateInput.addEventListener("input", function () {
+        // endDateInput.min = startDateInput.value;
+        // endDateInput.max = today.toISOString().split("T")[0];
+        // if (startDateInput.value) {
+        //     endDateInput.disabled = false;
+
+        endDateInput.min = startDateInput.value;
+        console.log(endDateInput.min);
+        today=new Date();
+        endDateInput.max = today.toISOString().split("T")[0];
+        // } else {
+        //     endDateInput.disabled = true;
+        // }
+    });
+
+}
  
  //INITIALIZATION CODE
  function init(){
+    readyDates();
     $('#filter-sales-report').click(filterSalesReport);
     $('#reports-link').addClass('active').css("border-bottom","2px solid black")
     $('#inputBrand').change(brandChanged)
@@ -221,6 +288,7 @@ function toCSV(json) {
     $('#inputEndDate').change(endDateChanged)
     $('#csv').click(downloadcsvfile)
     $('#generate-daily-sales-report').click(generateReportForRestDay);
+
     displaySalesReport([])
  }
 

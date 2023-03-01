@@ -1,4 +1,3 @@
-
 function getBrandUrl(){
 	var baseUrl = $("meta[name=baseUrl]").attr("content")
 	return baseUrl + "/api/brands";
@@ -30,9 +29,8 @@ function search(event)
 		 'Content-Type': 'application/json'
 		},
 		success: function(response) {
-			 
-			 $('.datatable').DataTable().destroy();
-			 displayBrandList(response);
+			$('.datatable').DataTable().destroy();
+			displayBrandList(response);
 			pagination();
 		},
 		error: handleAjaxError
@@ -43,6 +41,21 @@ function addBrand(event){
 	var $form = $("#brand-form");
 	var json = toJson($form);
 	var url = getBrandUrl();
+
+	var parsed=JSON.parse(json);
+
+	if(parsed.brand=="")
+        return frontendErrors("Brand is Empty");
+
+	if(parsed.category=="")
+        return frontendErrors("category is Empty");
+
+	if(parsed.brand.length>30)
+	return frontendErrors("Brand cannot conatins more than 30 characters");
+
+	if(parsed.category.length>30)
+	return frontendErrors("category cannot conatins more than 30 characters");
+
 
 	$.ajax({
 	   url: url,
@@ -56,7 +69,6 @@ function addBrand(event){
 			resetForm();
 			SuccessMessage("Successfully Added");
 			getBrandList();
-			// $.notify(JSON.parse(json).brand + " in category: "+JSON.parse(json).category + " added successfully!","success");
 	   },
 	   error: handleAjaxError
 	});
@@ -77,6 +89,19 @@ function updateBrand(event){
 	var $form = $("#brand-edit-form");
 	var json = toJson($form);
 
+	var parsed=JSON.parse(json);
+    if(parsed.brand=="")
+        return frontendErrors("Brand is Empty");
+
+	if(parsed.category=="")
+        return frontendErrors("category is Empty");
+
+	if(parsed.brand.length>30)
+		return frontendErrors("Brand cannot conatins more than 30 characters");
+	
+		if(parsed.category.length>30)
+		return frontendErrors("category cannot conatins more than 30 characters");
+
 	$.ajax({
 	   url: url,
 	   type: 'PUT',
@@ -85,7 +110,7 @@ function updateBrand(event){
        	'Content-Type': 'application/json'
        },	   
 	   success: function(response) {
-		$('#edit-brand-modal').modal('toggle');	
+		   $('#edit-brand-modal').modal('toggle');	
 		    SuccessMessage("Successfully Updated");
 			getBrandList();
 	   },
@@ -103,9 +128,9 @@ function getBrandList(){
 	   url: url,
 	   type: 'GET',
 	   success: function(data) {
-		$('.datatable').DataTable().destroy();
+		    $('.datatable').DataTable().destroy();
 	   		displayBrandList(data);  
-			   pagination();
+			pagination();
 	   },
 	   error: handleAjaxError
 	});
@@ -133,11 +158,14 @@ var processCount = 0;
 function processData(){
 	var file = $('#brandCategoryFile')[0].files[0];
 	console.log(file);
-	if(!file)
-    {
+	if(!file){
         ErrorMessage("Please select a file")
         return;
     }
+	if(file.name.split('.').pop()!="tsv"){
+		ErrorMessage("File format is not TSV");
+		return ;
+	}
 	readFileData(file, readFileDataCallback);
 }
 
@@ -237,7 +265,7 @@ function displayBrandList(data){
 		// console.log(e);
 		// '<button type="button" class="btn btn-outline-primary" onclick="deleteBrand(' + e.id + ')">delete</button>'
 		if(getRole()==="supervisor"){
-		    var buttonHtml = ' <button type="button" class="btn btn-dark" onclick="displayEditBrand(' + e.id + ')">edit</button>'
+		    var buttonHtml = ' <button type="button" class="btn btn-dark" onclick="displayEditBrand(' + e.id + ')">Edit</button>'
 		    var row = '<tr>'
 		    // + '<td>' + e.id + '</td>'
 		    + '<td>' + e.brand + '</td>'

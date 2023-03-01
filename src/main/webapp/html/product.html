@@ -101,13 +101,13 @@
 			  <div class="form-group" style="margin-bottom:20px;">
 			    <label for="inputName" class="col-sm-2 col-form-label">Name</label>
 			    <div class="col-sm-12">
-			      <input type="text" class="form-control" name="name" placeholder="enter name">
+			      <input type="text" class="form-control" name="name" placeholder="enter name" required maxlength="30">
 			    </div>
 			  </div>
 			  <div class="form-group" style="margin-bottom:20px;">
 			    <label for="inputMrp" class="col-sm-2 col-form-label">MRP</label>
 			    <div class="col-sm-12">
-			      <input type="number" class="form-control" name="mrp" placeholder="enter mrp">
+			      <input type="number" class="form-control" name="mrp" placeholder="enter mrp" required min="0" max="100000000">
 			    </div>
 			  </div>
  	           <input type="hidden" name="id" >
@@ -134,7 +134,7 @@
                         <label class="required col-sm-2-random col-form-label-random"
                                for="inputBarcode">&nbsp;&nbsp;<b>Barcode</b>&nbsp;&nbsp;</label>
                         <div class="col-sm-12">
-                            <input class="form-control" id="inputName" name="barcode" placeholder="Enter Barcode"
+                            <input class="form-control" id="inputName" name="barcode" placeholder="Enter Barcode" required maxlength="20"
                                    type="text">
                         </div>
                     </div>
@@ -165,7 +165,7 @@
                                for="inputName">&nbsp;&nbsp;<b>Product
                             Name</b>&nbsp;&nbsp;</label>
                         <div class="col-sm-12">
-                            <input class="form-control" id="inputName" name="name" placeholder="Enter Product name" type="text">
+                            <input class="form-control" id="inputName" name="name" placeholder="Enter Product name" type="text" required maxlength="20">
                         </div>
                     </div>
 
@@ -174,7 +174,7 @@
                                for="inputMrp">&nbsp;<b>&nbsp;&nbsp;MRP</b></label>
                         <div class="col-sm-12">
                             <input class="form-control" id="inputMrp" name="mrp" placeholder="Enter MRP"
-                                   type="number">
+                                   type="number" required min="0" max="100000000">
                         </div>
                     </div>
                 </form>

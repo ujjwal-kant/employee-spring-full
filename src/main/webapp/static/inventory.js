@@ -49,6 +49,23 @@ function addInventory(event){
 	var url = getInventoryUrl();
 	console.log(url)
 
+	var parsed=JSON.parse(json);
+	console.log(parsed.quantity);
+	if(parsed.barcode==="" || parsed.quantity==="")
+    return frontendErrors("Fields are empty");
+
+    if(isInteger(parsed.quantity)==false)
+    return frontendErrors("Quantity is not an integer");
+
+    if(parsed.quantity<0)
+    return frontendErrors("Quantity can not be negative");
+
+	if(parsed.quantity==0)
+    return frontendErrors("Quantity can not be equal to zero");
+
+	if(parsed.quantity>100000000)
+    return frontendErrors("Quantity can not be greater than 100000000")
+
 	$.ajax({
 	   url: url,
 	   type: 'PUT',
@@ -57,7 +74,8 @@ function addInventory(event){
        	'Content-Type': 'application/json'
        },	   
 	   success: function(response) {
-		    SuccessMessage("Successfully Added");
+		    SuccessMessage("Successfully Updated");
+			$('#edit-inventory-modal').modal('toggle');
 	   		getInventoryList();  
 	   },
 	   error: handleAjaxError
@@ -71,12 +89,38 @@ function resetForm() {
     element.reset()
 }
 
+function isInteger(str) {
+	// Regular expression to match an integer
+	var integerPattern = /^-?\d+$/;
+	
+	// Test if the string matches the integer pattern
+	return integerPattern.test(str);
+  }
+  
+
 function addon(event){
 	//Set the values to update
 	var $form = $("#inventory-add-form");
 	var json = toJson($form);
 	var url = getInventoryUrl()+"/add";
 	console.log(url)
+
+	var parsed=JSON.parse(json);
+	console.log(parsed.quantity);
+	if(parsed.barcode==="" || parsed.quantity==="")
+    return frontendErrors("Quantity is Empty");
+
+    if(isInteger(parsed.quantity)==false)
+    return frontendErrors("Quantity is not an integer");
+
+    if(parsed.quantity<0)
+    return frontendErrors("Quantity can not be negative")
+
+	if(parsed.quantity>100000000)
+    return frontendErrors("Quantity can not be greater than 100000000")
+
+	if(parsed.quantity==0)
+    return frontendErrors("Quantity can not be equal to zero");
 
 	$.ajax({
 	   url: url,
@@ -97,7 +141,6 @@ function addon(event){
 }
 
 function updateInventory(event){
-	$('#edit-inventory-modal').modal('toggle');
 	//Get the ID
 	var id = $("#inventory-edit-form input[name=id]").val();
 	var url = getInventoryUrl() + "/" + id;
@@ -105,6 +148,22 @@ function updateInventory(event){
 	//Set the values to update
 	var $form = $("#inventory-edit-form");
 	var json = toJson($form);
+
+	var parsed=JSON.parse(json);
+  console.log(parsed);
+  if(parsed.quantity=="")
+    return frontendErrors("Quantity is Empty");
+
+	if(isInteger(parsed.quantity)==false)
+    return frontendErrors("Quantity is not an Integer");
+  if(parsed.quantity<0)
+    return frontendErrors("Quantity can not be negative");
+
+	if(parsed.quantity>100000000)
+    return frontendErrors("Quantity can not be greater than 100000000")
+
+	if(parsed.quantity==0)
+    return frontendErrors("Quantity can not be equal to zero");
 
 	$.ajax({
 	   url: url,
@@ -115,6 +174,7 @@ function updateInventory(event){
        },	   
 	   success: function(response) {
 	   		getInventoryList();   
+			$('#edit-inventory-modal').modal('toggle');
 	   },
 	   error: handleAjaxError
 	});
@@ -165,6 +225,10 @@ function processData(){
         ErrorMessage("Please select a file")
         return;
     }
+	if(file.name.split('.').pop()!="tsv"){
+		ErrorMessage("File format is not TSV");
+		return ;
+	}
 	readFileData(file, readFileDataCallback);
 }
 
@@ -241,7 +305,7 @@ function displayInventoryList(data){
 	for(var i in data){
 		var e = data[i];
 		if(getRole()==="supervisor"){
-		    var buttonHtml = ' <button type="button" class="btn btn-dark" onclick="displayEditInventory(' + "'"+ String(e.barcode) +"'"+ ')">edit</button>'
+		    var buttonHtml = ' <button type="button" class="btn btn-dark" onclick="displayEditInventory(' + "'"+ String(e.barcode) +"'"+ ')">Edit</button>'
 		    var row = '<tr>'
 		    + '<td>' + e.barcode + '</td>'
 		    + '<td>'  + e.quantity + '</td>'

@@ -185,7 +185,7 @@ function displayCreateOrderItems(orderItems, total = 0) {
                <td class="text-center">${e.sellingPrice.toFixed(2)}</td>
                <td class="text-center">
                      <button class="btn btn-dark" 
-                       title="Delete item" onclick="deleteOrderItem(\'${e.barcode}\')">
+                       title="Delete item" onclick="deleteOrderItem('${e.barcode}','${e.quantity}')">
                        ${Delete_item}
                      </button>
                </td>
@@ -202,6 +202,10 @@ function displayCreateOrderItems(orderItems, total = 0) {
 let orderItems = [];
 
 function getCurrentOrderItem() {
+
+  if(isInteger($("#inputQuantity").val())==false)
+    return frontendErrors("Quantity is not an integer");
+
   return {
     barcode: $("#inputBarcode").val(),
     sellingPrice: Number.parseFloat($("#inputSellingPrice").val()),
@@ -211,6 +215,10 @@ function getCurrentOrderItem() {
 
 function addItem(item) {
   const index = orderItems.findIndex((it) => it.barcode === item.barcode.toString());
+  console.log(item);
+
+  // if(isInteger(item.quantity)==false)
+  //   return frontendErrors("Quantity is not an integer");
 
   console.log(mapbarcodequantity[item.barcode]);
   if (index == -1) {
@@ -254,16 +262,15 @@ function calculateTotalPrice() {
   return total;
 }
 
-function deleteOrderItem(barcode) {
-  console.log(barcode);
-  const index = orderItems.findIndex((it) => it.barcode === barcode.toString());
-  console.log(index);
+function deleteOrderItem(barcode,quantity) {
 
+  const index = orderItems.findIndex((it) => it.barcode === barcode.toString());
+  
   if (index == -1) return;
 
-  console.log(mapbarcodequantity[item.barcode]);
-  mapbarcodequantity[item.barcode]+=item.quantity;
-  console.log(mapbarcodequantity[item.barcode]);
+  console.log(mapbarcodequantity[barcode]);
+  mapbarcodequantity[barcode]+=quantity;
+  console.log(mapbarcodequantity[barcode]);
 
   orderItems.splice(index, 1);
   displayCreateOrderItems(orderItems, calculateTotalPrice());
@@ -282,6 +289,8 @@ function addOrderItem(event) {
 function addEditOrderItem() {
   const item = getCurrentEditOrderItem();
   addItem(item);
+  console.log(item);
+  console.log("H");
   displayEditOrder(orderItems, calculateTotalPrice());
   $("#edit-order-item-form").trigger("reset");
 }
@@ -297,7 +306,6 @@ function deleteEditOrderItem(barcode,quantity) {
   mapbarcodequantity[barcode]+=quantity;
   console.log(mapbarcodequantity[barcode]);
 
-  if (index == -1) return;
   orderItems.splice(index, 1);
   displayEditOrder(orderItems, calculateTotalPrice());
 }
@@ -331,10 +339,19 @@ function displayOrderList(data) {
       ' <button type="button" class="btn btn-dark"  title="Details" onclick="displayOrderDetails(' +
       b.id +
       ')">Details</button>';
+
+      if (b.isInvoiceCreated == false) {
     buttonHtml +=
       ' <button type="button" class="btn btn-dark" id="generateInvoice" title="Generate Invoice" onclick="GenerateInvoice(' +
       b.id +
       ')">Generate Invoice</button>'; 
+      }
+      else{
+        buttonHtml +=
+      ' <button type="button" class="btn btn-dark" id="downloadInvoice" title="Download Invoice" onclick="download(' +
+      b.id +
+      ')">Download Invoice</button>'; 
+      }
 
     
     var row =
@@ -465,13 +482,13 @@ function displayOrderDetailsInModal(data) {
       productName +
       "</td>" +
       '<td class="text-center">' +
-      numberWithCommas(quantity) +
+      (quantity) +
       "</td>" +
       '<td class="text-center">' +
-      numberWithCommas(sellingPrice.toFixed(2)) +
+      (sellingPrice.toFixed(2)) +
       "</td>" +
       '<td class="text-center">' +
-      numberWithCommas(totalPriceStr) +
+      (totalPriceStr) +
       "</td>" +
       "</tr>";
 
@@ -509,8 +526,12 @@ function onSellingPriceChanged(barcode) {
 }
 
 function getCurrentEditOrderItem() {
+  // console.log()
+  if(isInteger($("#inputEditQuantity").val())==false)
+    return frontendErrors("Quantity is not an integer");
   return {
     barcode: $("#inputEditBarcode").val(),
+
     quantity: Number.parseInt($("#inputEditQuantity").val()),
     sellingPrice: Number.parseFloat($("#inputEditSellingPrice").val()),
   };
@@ -527,6 +548,8 @@ function init() {
   $("#update-order").click(updateOrder);
   $("#refresh-data").click(getOrderList);
   $('#generateInvoice').click(getOrderList);
+  $('#downloadInvoice').click(getOrderList);
+  
 }
 
 $(document).ready(init);
@@ -609,9 +632,9 @@ function GenerateInvoice(id) {
           // window.location.href = url;
           getOrderList();
 
-          console.log("Hello")
-          download(id);
-          console.log("hello");
+          // console.log("Hello")
+          // download(id);
+          // console.log("hello");
       },
 
       error: handleAjaxError

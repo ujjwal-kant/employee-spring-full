@@ -33,12 +33,31 @@ function setActive(){
 
 function pagination(){
     var table = $('.datatable');
-
     $(table).DataTable({
     });
 }
 
 $(document).ready(setActive());
+
+function frontendErrors(response){
+    toastr.error(response, "Error: ", {
+        "closeButton": false,
+        "debug": false,
+        "newestOnTop": false,
+        "progressBar": true,
+        "positionClass": "toast-top-right",
+        "preventDuplicates": true,
+        "onclick": null,
+        "showDuration": "100",
+        "hideDuration": "1000",
+        "timeOut": "5000",
+        "extendedTimeOut": "1000",
+        "showEasing": "swing",
+        "hideEasing": "linear",
+        "showMethod": "show",
+        "hideMethod": "hide"
+    })
+}
 
 function handleAjaxError(response){
 	var response = JSON.parse(response.responseText);
@@ -184,6 +203,14 @@ function extractNameAndCategory(brandCategory) {
 function numberWithCommas(x) {
     return x.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",");
 }
+
+function isInteger(str) {
+	// Regular expression to match an integer
+	var integerPattern = /^-?\d+$/;
+	
+	// Test if the string matches the integer pattern
+	return integerPattern.test(str);
+  }
 
 var arrayInputNumber = document.querySelectorAll("input[type=number]");
 arrayInputNumber.forEach( (input) => input.addEventListener("keypress", function (evt) {

@@ -32,9 +32,9 @@ function getBrandList(){
 }
 
 brandCategoryData = []
- brandSet = new Set()
- categorySet = new Set()
- function getBrandCategory(){
+brandSet = new Set()
+categorySet = new Set()
+function getBrandCategory(){
       $.ajax({
             url: getBrandUrl(),
             type: 'GET',
@@ -249,7 +249,6 @@ function search(event)
 		 'Content-Type': 'application/json'
 		},
 		success: function(response) {
-			 
 			 $('.datatable').DataTable().destroy();
 			 displayProductList(response); 
 			pagination();
@@ -262,11 +261,21 @@ function search(event)
 function addProduct(event){
 	//Set the values to update
 
-	$('#add-product-modal').modal('toggle');
 	var $form = $("#add-product-form");
 	var json = toJson($form);
 	console.log(json);
 	var url = getProductUrl();
+
+	var parsed = JSON.parse(json);
+    if (parsed.barcode === "" || parsed.name === "" || parsed.mrp === "" || parsed.brand === "" || parsed.category === "")
+        return frontendErrors("Fields are empty");
+    // if(Number.isInteger(parsed.mrp)==false)
+
+    if (parsed.mrp < 0)
+        return frontendErrors("MRP can not be negative")
+	
+	if (parsed.mrp > 1000000000)
+        return frontendErrors("MRP can not be greater than 100000000.")
 	//console.log(url);
 
 	$.ajax({
@@ -278,6 +287,7 @@ function addProduct(event){
        },	   
 	   success: function(response) {
 		    SuccessMessage("Successfully Added");
+			$('#add-product-modal').modal('toggle');
 			resetForm();
 	   		getProductList();  
 	   },
@@ -302,6 +312,19 @@ function updateProduct(event){
 	//Set the values to update
 	var $form = $("#product-edit-form");
 	var json = toJson($form);
+
+	var parsed = JSON.parse(json);
+    console.log(parsed);
+    if (parsed.barcode === "" || parsed.name === "" || parsed.mrp === "" || parsed.brand === "" || parsed.category === "")
+        return frontendErrors("Fields are empty");
+    // if(Number.isInteger(parsed.mrp)==false)
+    //     return frontendErrors("MRP is not an integer");
+
+	if (parsed.mrp < 0)
+        return frontendErrors("MRP can not be negative")
+	
+	if (parsed.mrp > 1000000000)
+        return frontendErrors("MRP can not be greater than 1000000000.")
 
 	$.ajax({
 	   url: url,
@@ -362,6 +385,10 @@ function processData(){
         ErrorMessage("Please select a file");
         return;
     }
+	if(file.name.split('.').pop()!="tsv"){
+		ErrorMessage("File format is not TSV");
+		return ;
+	}
 	readFileData(file, readFileDataCallback);
 }
 
@@ -442,7 +469,7 @@ function displayProductList(data){
 		var e = data[i];
 		cnt++;
 		if(getRole()=="supervisor"){
-		    var buttonHtml =' <button type="button" class="btn btn-dark" onclick="displayEditProduct(' + e.id + ')">edit </button>'
+		    var buttonHtml =' <button type="button" class="btn btn-dark" onclick="displayEditProduct(' + e.id + ')">Edit </button>'
 		    var row = '<tr>'
 		    + '<td>' + cnt + '</td>'
 		    + '<td>' + e.barcode + '</td>'
