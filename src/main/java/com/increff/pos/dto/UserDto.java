@@ -30,14 +30,5 @@ public class AdminDto {
             throw new ApiException("Email cannot be empty");
         if (StringUtil.isEmpty(userForm.getPassword()))
             throw new ApiException("Password cannot be empty!");
-        if (StringUtil.isEmpty(userForm.getConfirmPassword()))
-            throw new ApiException("Confirm password cannot be empty!");
-            // System.out.print(userForm.getConfirmPassword());
-            // System.out.print(userForm.getPassword());
-        // if (userForm.getPassword() != userForm.getConfirmPassword())
-        //     throw new ApiException("Password does not match!");
     }
-
-
-    
 }
