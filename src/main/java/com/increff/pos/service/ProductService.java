@@ -75,7 +75,7 @@ public class ProductService {
         return productPojo;
     }
 
-    public List<ProductPojo> serachByProductNameAndBarcode(String barcode,String productName) throws ApiException {
-        return dao.serachByProductNameAndBarcode(productName,barcode);
+    public List<ProductPojo> searchByProductNameAndBarcode(String barcode,String productName) throws ApiException {
+        return dao.searchByProductNameAndBarcode(productName,barcode);
     }
 }

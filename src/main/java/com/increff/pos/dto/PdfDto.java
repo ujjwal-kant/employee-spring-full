@@ -11,7 +11,6 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Base64;
-import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,7 +33,6 @@ import com.increff.pos.service.OrderItemService;
 import com.increff.pos.service.OrderService;
 import com.increff.pos.service.ProductService;
 
-import io.swagger.annotations.Api;
 
 @Service
 public class PdfDto {
@@ -48,12 +46,13 @@ public class PdfDto {
     private OrderService orderService;
 
     public void get(int id) throws IOException, ApiException {
+        orderService.getById(id);
         List<OrderItemPojo> orderItemPojoList = orderItemService.get(id);
-        if(orderItemPojoList.size()==0)
+        if(orderItemPojoList.size()==0){
             throw new ApiException("No order items present in order to place");
+        }
 
         PdfData pdfData = new PdfData();
-        // Date now=Date.now();
         LocalDateTime now = LocalDateTime.now();
         Timestamp timestamp = Timestamp.valueOf(now);
 
@@ -77,8 +76,6 @@ public class PdfDto {
             ProductPojo productPojo = productService.get(orderItemPojo.getProductId());
             total +=convertOrderItemPojoToPdfData(orderItemPojo,pdfListData,pdfData,c,productPojo);
         }
-        
-
         pdfData.setInvoiceTime(formattedTime);
         pdfData.setInvoiceDate(formattedDate);
         pdfData.setOrderId(id);
@@ -102,7 +99,7 @@ public class PdfDto {
         String response = restTemplate.postForObject(url, request, String.class);
 
         String filePath = "C:/Rep/employee/invoices\\order_"+add+".pdf";
-        System.out.println(filePath);
+        // System.out.println(filePath);
         byte[] decodedBytes = Base64.getDecoder().decode(response);
         FileOutputStream fileOutputStream = new FileOutputStream(filePath);
         fileOutputStream.write(decodedBytes);
@@ -111,6 +108,19 @@ public class PdfDto {
         catch(Exception e){
             throw new ApiException("Invoice Server not started");
         }
+    }
+
+    public ResponseEntity<byte[]> download(int id) throws ApiException, IOException {
+        OrderPojo orderPojo = orderService.getById(id);
+        Path pdf = Paths.get("C:/Rep/employee/invoices/order_" +orderPojo.getPath()+".pdf");
+        byte[] contents = Files.readAllBytes(pdf);
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_PDF);
+        String filename = "order_" + orderPojo.getPath()+ ".pdf";
+        headers.setContentDispositionFormData(filename, filename);
+        headers.setCacheControl("must-revalidate, post-check=0, pre-check=0");
+        ResponseEntity<byte[]> response = new ResponseEntity<>(contents, headers, HttpStatus.OK);
+        return response;
     }
 
     public static Double convertOrderItemPojoToPdfData(OrderItemPojo orderItemPojo, List<PdfListData> list, PdfData pdfData, Integer integer, ProductPojo productPojo) {
@@ -127,19 +137,7 @@ public class PdfDto {
         list.add(pdfListData);
         return roundedNum;
     }
-
-    public ResponseEntity<byte[]> download(int id) throws ApiException, IOException {
-        OrderPojo orderPojo = orderService.getById(id);
-        Path pdf = Paths.get("C:/Rep/employee/invoices/order_" +orderPojo.getPath()+".pdf");
-        byte[] contents = Files.readAllBytes(pdf);
-        HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.APPLICATION_PDF);
-        String filename = "order_" + orderPojo.getPath()+ ".pdf";
-        headers.setContentDispositionFormData(filename, filename);
-        headers.setCacheControl("must-revalidate, post-check=0, pre-check=0");
-        ResponseEntity<byte[]> response = new ResponseEntity<>(contents, headers, HttpStatus.OK);
-        return response;
-    }
+    
 }
 
 

@@ -129,41 +129,9 @@ public class ValidateUtil {
         return dateFormat.format(date);
     }
 
-    public static boolean isValidDate(String dateString) {
-        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-        dateFormat.setLenient(false); // disable lenient parsing
-        try {
-            // parse the input string as a date using the specified format
-            Date parsedDate = dateFormat.parse(dateString);
-            // if parsing succeeds, the input string is a valid date in the correct format
-            return true;
-        } catch (Exception e) {
-            // if parsing fails, the input string is not a valid date in the correct format
-            return false;
-        }
-    }
 
-    public static boolean isDateFormatCorrect(String dateString) {
-        try {
-            // Parse the string as a LocalDate with the given format yyyy-mm-dd
-            LocalDate.parse(dateString, java.time.format.DateTimeFormatter.ISO_LOCAL_DATE);
-            return true;
-        } catch (DateTimeParseException e) {
-            return false;
-        }
-    }
 
-    public static int compare(Date date1, String dateString2) {
-        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-        dateFormat.setLenient(false); // disable lenient parsing
-        try {
-            // parse the input string as a date using the specified format
-            Date date2 = dateFormat.parse(dateString2);
-            // compare the two dates using the compareTo method
-            return date1.compareTo(date2);
-        } catch (Exception e) {
-            // if parsing fails, return an error value (-2)
-            return -2;
-        }
-    }
+
+
+
 }

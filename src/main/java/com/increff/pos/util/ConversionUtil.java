@@ -134,8 +134,8 @@ public class ConversionUtil {
     public static DailySalesReportData getDailySalesReportData(DailyReportSalesPojo dailySalesReportPojo) {
         DailySalesReportData dailySalesReportData = new DailySalesReportData();
         dailySalesReportData.setDate(dailySalesReportPojo.getDate());
-        dailySalesReportData.setOrderCount(dailySalesReportPojo.getInvoicedItemsCount());
-        dailySalesReportData.setItemCount(dailySalesReportPojo.getInvoicedOrdersCount());
+        dailySalesReportData.setOrderCount(dailySalesReportPojo.getInvoicedOrdersCount());
+        dailySalesReportData.setItemCount(dailySalesReportPojo.getInvoicedItemsCount());
         dailySalesReportData.setTotalRevenue(dailySalesReportPojo.getTotalRevenue());
         return dailySalesReportData;
     }

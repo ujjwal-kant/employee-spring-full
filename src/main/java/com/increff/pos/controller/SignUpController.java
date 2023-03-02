@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.increff.pos.dto.AdminDto;
+import com.increff.pos.dto.UserDto;
 import com.increff.pos.model.data.InfoData;
 import com.increff.pos.model.form.UserForm;
 import com.increff.pos.service.ApiException;
@@ -23,7 +23,7 @@ public class SignUpController extends AbstractUiController{
 	@Autowired
 	private InfoData info;
     @Autowired
-    private AdminDto dto;
+    private UserDto dto;
 
     @ApiOperation(value = "Registers a user in the application")
 	@RequestMapping(path = "/session/signup", method = RequestMethod.POST)

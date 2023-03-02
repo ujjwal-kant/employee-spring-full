@@ -8,15 +8,17 @@ import com.increff.pos.pojo.UserPojo;
 import com.increff.pos.service.ApiException;
 import com.increff.pos.service.UserService;
 import com.increff.pos.util.ConversionUtil;
+import com.increff.pos.util.NormaliseUtil;
 import com.increff.pos.util.StringUtil;
 
 @Component
-public class AdminDto {
+public class UserDto {
 
     @Autowired
     private UserService service;
 
     public void add(UserForm userForm) throws ApiException {
+        NormaliseUtil.normalizeUserForm(userForm);
         // System.out.print(userForm.getEmail());
         validateForm(userForm);
         

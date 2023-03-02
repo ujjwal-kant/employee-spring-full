@@ -18,7 +18,7 @@ public class UserService {
 	private UserDao dao;
 
 	public void add(UserPojo p) throws ApiException {
-		normalize(p);
+		// normalize(p);
 		UserPojo existing = dao.select(p.getEmail());
 		if (existing != null) {
 			throw new ApiException("User with given email already exists");
@@ -31,15 +31,7 @@ public class UserService {
 		return dao.select(email);
 	}
 
-	public List<UserPojo> getAll() {
-		return dao.selectAll();
-	}
 
-	public void delete(int id) {
-		dao.delete(id);
-	}
 
-	protected static void normalize(UserPojo p) {
-		p.setEmail(p.getEmail().toLowerCase().trim());
-	}
+	
 }

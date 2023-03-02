@@ -134,8 +134,10 @@ public class InventoryServiceTest extends AbstractUnitTest{
         ProductPojo p = DummyProductPojo("name4", "barcode4",b.getId(), 98.01);
         productService.add(p);
         inventoryService.initialize(p.getId());
+        
 
         InventoryPojo i = inventoryService.getByProductId(p.getId());
+        inventoryService.update(i);
         Integer cnt=0;
 
         assertEquals(cnt,i.getQuantity());

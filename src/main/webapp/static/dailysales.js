@@ -12,10 +12,8 @@ function getDailySalesReportUrl(){
          'Content-Type': 'application/json'
         },
         success: function(response) {
-            
-		$('.datatable').DataTable().destroy();
              displayDailySalesReport(response);
-             pagination();
+           
         },
         error: handleAjaxError
      });
@@ -25,7 +23,8 @@ function getDailySalesReportUrl(){
  function displayDailySalesReport(data) {
      var $tbody = $('#daily-sales-table').find('tbody');
      $tbody.empty();
-     for(var i in data){
+     console.log(data);
+     for(let i=data.length-1; i>=0; i--){
          var b = data[i];
          console.log(b);
          var row = '<tr class="text-center">'

@@ -75,7 +75,7 @@ public class ProductDto {
 
     public List<ProductData> searchByProductNameAndBarcode(ProductForm form) throws ApiException {
         HelperUtil.setProductForm(form);
-        List<ProductPojo> list1 = productService.serachByProductNameAndBarcode(form.getBarcode(),form.getName());
+        List<ProductPojo> list1 = productService.searchByProductNameAndBarcode(form.getBarcode(),form.getName());
         List<ProductData> list2 = new ArrayList<ProductData>();
 		for (ProductPojo p : list1) {
             BrandPojo b = brandService.getBrandCategorybyID(p.getBrandCategoryId());

@@ -325,8 +325,8 @@ function displayOrderList(data) {
     var buttonHtml = "";
     if (getRole() === "supervisor") {
       if (b.isInvoiceCreated == true) {
-          // buttonHtml =
-          // '<button type="button" class="btn btn-dark" disabled="disabled"  title="Edit"></button>';
+          buttonHtml =
+          '<button type="button" class="btn btn-dark" disabled="disabled"  title="Edit">Edit</button>';
       } else {
         buttonHtml =
           '<button type="button" class="btn btn-dark" title="Edit" onclick="displayEditOrderModal(' +

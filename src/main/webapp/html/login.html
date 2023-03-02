@@ -2,17 +2,27 @@
 
 <html lang="en">
 
-<head th:replace="snippets.html :: name_head"></head>
+<head th:replace="snippets.html :: name_head">
+	<link rel="stylesheet"  th:href="@{/static/login.css}">
+</head>
 
 <body>
 
 <nav th:replace="snippets.html :: name_site_navbar"></nav>
-
+<!-- 
+<div class="login-box">
+    <h1>Login</h1>
+    <form>
+	  <input type="text" class="form-control" name="email" id="email" placeholder="enter email">
+	  <input type="password" class="form-control" name="password" id="password" placeholder="password">
+      <button type="submit" id="login">Login</button>
+    </form>
+  </div> -->
 
 <div class="container">
 
-<div class="row justify-content-center">
-<div class="col-6">
+<div class="row justify-content-center" style="padding:50px;">
+<div class="col-5">
 	
 	<div class="card">
   	<div class="card-header">
@@ -52,10 +62,10 @@
 	
 	
 
-</div> <!-- Col -->
-</div> <!-- Row -->
+</div>
+ </div> 
 
-</div> <!-- Container-->
+</div> 
 
 <footer th:replace="snippets.html :: name_footer"></footer>
 

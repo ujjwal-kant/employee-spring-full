@@ -46,7 +46,7 @@ public class ProductDao extends AbstractDao {
 		// em.merge(productPojo);
 	}
 
-    public List<ProductPojo> serachByProductNameAndBarcode(String name, String barcode) {
+    public List<ProductPojo> searchByProductNameAndBarcode(String name, String barcode) {
         TypedQuery<ProductPojo> query = getQuery(SEARCH_LIKE_NAME_AND_BARCODE, ProductPojo.class);
         query.setParameter("name",name+"%");
         query.setParameter("barcode", barcode+"%");

@@ -382,9 +382,16 @@ function displayInventory(data){
 	$('#edit-inventory-modal').modal('toggle');
 }
 
+function displayInventoryAddForm(){
+	resetUploadDialog(); 	
+	resetForm();
+   $('#addOn-inventory-modal').modal('toggle');
+}
+
 
 //INITIALIZATION CODE
 function init(){
+	$('#add-on-inventory').click(displayInventoryAddForm);
 	$('#add-inventory').click(addInventory);
 	$('#addon-inventory').click(addon);
 	$('#update-inventory').click(updateInventory);

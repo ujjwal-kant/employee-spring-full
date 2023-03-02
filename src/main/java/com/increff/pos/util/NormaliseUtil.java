@@ -10,10 +10,15 @@ import com.increff.pos.model.form.InventoryForm;
 import com.increff.pos.model.form.OrderItemForm;
 import com.increff.pos.model.form.ProductForm;
 import com.increff.pos.model.form.SalesReportForm;
+import com.increff.pos.model.form.UserForm;
 
 import java.util.Date;
 
 public class NormaliseUtil {
+
+    public static void normalizeUserForm(UserForm p) {
+		p.setEmail(p.getEmail().toLowerCase().trim());
+	}
 
     public static void normalizeBrandCategory(BrandForm brand) {
         brand.setBrand(StringUtil.toLowerCase(brand.getBrand()));

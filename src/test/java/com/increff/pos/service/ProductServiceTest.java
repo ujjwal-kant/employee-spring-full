@@ -152,5 +152,65 @@ public class ProductServiceTest extends AbstractUnitTest{
         }
 
     }
+
+    @Test
+    public void testHappyCheckIfBarcodeExists() throws ApiException{
+        BrandPojo b = brandService.getIfBrandAndCategoryExists("brand", "category");
+        ProductPojo p = DummyProductPojo("name3", "barcode3",b.getId(), 98.01);
+        productService.add(p);
+
+        ProductPojo productPojo = DummyProductPojo("name4", "barcode3",b.getId(), 98.03);
+        productService.checkIfBarcodeExists("barcode6");
+        try{
+            productService.checkIfBarcodeExists("barcode3");
+        }
+        catch(ApiException e){
+            assertEquals("Another Product with barcode barcode3 already exists" , e.getMessage());
+        }
+
+    }
+
+    @Test
+    public void testHappyGetByBarcode() throws ApiException{
+        BrandPojo b = brandService.getIfBrandAndCategoryExists("brand", "category");
+        ProductPojo productPojo = DummyProductPojo("name3", "barcode3",b.getId(), 98.01);
+        productService.add(productPojo);
+
+        ProductPojo getproductPojo = productService.getByBarcode("barcode3");
+
+        assertEquals(productPojo.getBarcode(), getproductPojo.getBarcode());
+        assertEquals(productPojo.getBrandCategoryId(), getproductPojo.getBrandCategoryId());
+        assertEquals(productPojo.getMrp(), getproductPojo.getMrp());
+        assertEquals(productPojo.getName(), getproductPojo.getName());
+
+    }
+
+    @Test
+    public void testSadGetByBarcode() throws ApiException{
+        BrandPojo b = brandService.getIfBrandAndCategoryExists("brand", "category");
+        ProductPojo p = DummyProductPojo("name3", "barcode3",b.getId(), 98.01);
+        productService.add(p);
+
+        ProductPojo productPojo = DummyProductPojo("name4", "barcode3",b.getId(), 98.03);
+        try{
+            productService.getByBarcode("barcode6");
+        }
+        catch(ApiException e){
+            assertEquals("Product with barcode barcode6 does not exists" , e.getMessage());
+        }
+
+    }
+
+    @Test
+    public void testHappySearchByProductNameAndBarcode() throws ApiException{
+        BrandPojo b = brandService.getIfBrandAndCategoryExists("brand", "category");
+        ProductPojo productPojo = DummyProductPojo("name3", "barcode3",b.getId(), 98.01);
+        productService.add(productPojo);
+
+        List<ProductPojo> list=productService.searchByProductNameAndBarcode("","");
+
+        assertEquals(3,list.size());
+
+    }
     
 }

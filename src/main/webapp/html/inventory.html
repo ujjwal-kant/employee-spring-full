@@ -10,41 +10,14 @@
 
 <div class="container">
 
-<h3> Inventory</h3>
-
- <!-- Top row with form-->
- <div class="row" th:if="${info.getRole() == 'supervisor'}">
-	&nbsp;&nbsp;&nbsp;<h4>Add On</h4>
-	 <div class="col-12" >
-			<form id="inventory-add-form">
-				<div class="row">
-					<div class="form-group col-md-4">
-						<label for="inputBarcode">Barcode</label>
-                      <select class="form-control" name="barcode" id="inputBarcode" required="required">
-                      <option value="">Select Category</option>
-                    </select>
-						<!-- <label for="inputBarcode">Barcode</label>
-						<input type="text" class="form-control" name="barcode" id="inputBarcode" placeholder="Enter Product Barcode"> -->
-					 </div>
-				   <div class="form-group col-md-4">
-					  <label for="inputQuantity">Quantity</label>
-					  <input type="number" class="form-control" name="quantity" id="inputQuantity" placeholder="Enter Quantity" required min="0" max="1000000000">
-				   </div>
-					  <div class="form-group d-flex flex-column justify-content-end col-md-4 ml-auto">
-						<div class="ml-auto">
-						<button type="button" class="btn btn-dark" id="addon-inventory">Add Inventory</button>
-						&nbsp;
-						<button type="button" class="btn btn-dark" id="upload-data">Upload</button>
-						</div>
-					</div>
-				</div>
-			 </form>
-	 </div>	
-
-	 <div class="col-12">
-		&nbsp;
+<div class="row">
+	<h2 class="col my-auto">Inventory</h2>
+	<div class="col d-flex justify-content-end">
+		<button type="button" class="btn btn-dark" id="add-on-inventory">Add Inventory</button>
+		<!-- <button type="button" class="btn btn-success px-4 m-2 shadow" id="add-order-button" th:if="${info.getRole() == 'supervisor'}">Add</button> -->
 	</div>
-</div> 
+</div>
+ 
 
 <!-- Blank Row -->
 <div class="row">
@@ -69,6 +42,48 @@
 
 </div>
 </div>
+
+    <!-- Inventory Add Modal -->
+	<div class="modal" tabindex="-1" role="dialog" id="addOn-inventory-modal">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title">Add On Inventory</h5>
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+				</div>
+				<div class="modal-body">
+					<form  id="inventory-add-form">
+						<div class="form-group" style="margin-bottom:20px;">
+							<label for="inputBarcode" class="col-sm-2 col-form-label">Barcode</label>
+							<div class="col-sm-12">
+								   <select class="form-control" name="barcode" id="inputBarcode" required="required">
+									<option value="">Select Category</option>
+								  </select>
+							</div>
+						</div>
+						
+						  
+							<!-- <label for="inputBarcode">Barcode</label>
+							<input type="text" class="form-control" name="barcode" id="inputBarcode" placeholder="Enter Product Barcode"> -->
+						 
+
+						<div class="form-group" style="margin-bottom:20px;">
+							<label for="inputQuantity" class="col-sm-2 col-form-label">Quantity</label>
+							<div class="col-sm-12">
+								<input type="number" class="form-control" name="quantity" placeholder="Enter quantity" min="0" max="1000000000" required >
+							</div>
+						</div>
+					</form>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-dark" data-dismiss="modal">Cancel</button>
+					<button type="button" class="btn btn-dark" id="addon-inventory">Add On</button>
+				</div>
+			</div>
+		</div>
+	</div>
 
 	<!-- Inventory Edit Modal -->
 	<div class="modal" tabindex="-1" role="dialog" id="edit-inventory-modal">

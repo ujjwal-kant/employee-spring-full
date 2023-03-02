@@ -145,7 +145,7 @@ public class ReportDto {
         Date yesterday1=(Date) TimeUtil.getStartOfDay(salesReportForm.getStartDate());
         Date date1=(Date) TimeUtil.getEndOfDay(salesReportForm.getEndDate());
         List<OrderItemPojo> orderItemPojoList = orderItemService.getAllOrderItemBetween(yesterday1, date1);
-        System.out.print(orderItemPojoList.size());
+        // System.out.print(orderItemPojoList.size());
         List<ProductPojo> productPojoList = getProductListFromOrderItems(orderItemPojoList);
         return calculateQuantityAndRevenue(brandPojoList, productPojoList, orderItemPojoList);
     }
@@ -161,11 +161,11 @@ public class ReportDto {
 
     public List<DailySalesReportData> generateReportForRestDay() throws ApiException {
         DailyReportSalesPojo lastdailyReportGeneratedOn=reportService.lastdailyReportGeneratedOn();
-        System.out.println(lastdailyReportGeneratedOn.getDate());
+        // System.out.println(lastdailyReportGeneratedOn.getDate());
         
         Date last=TimeUtil.getStartOfDay(lastdailyReportGeneratedOn.getDate());
         Date today=TimeUtil.getStartOfDay(new Date());
-        System.out.println(today);
+        // System.out.println(today);
 
         Integer cnt=0;
         
@@ -191,7 +191,7 @@ public class ReportDto {
 
         Double totalRevenue = 0d;
         for (OrderItemPojo orderItem : orderItemPojoList) {
-            count++;
+            count+=orderItem.getQuantity();
             totalRevenue += orderItem.getSellingPrice() * orderItem.getQuantity();
         }
         DecimalFormat df = new DecimalFormat("#.##");
@@ -200,8 +200,8 @@ public class ReportDto {
         DailyReportSalesPojo dailySalesReportPojo = new DailyReportSalesPojo();
         dailySalesReportPojo.setDate(date2);
         dailySalesReportPojo.setTotalRevenue(roundedTotal);
-        dailySalesReportPojo.setInvoicedItemsCount(orderPojoList.size());
-        dailySalesReportPojo.setInvoicedOrdersCount(count);
+        dailySalesReportPojo.setInvoicedItemsCount(count);
+        dailySalesReportPojo.setInvoicedOrdersCount(orderItemPojoList.size());
         reportService.add(dailySalesReportPojo);
     }
 }
