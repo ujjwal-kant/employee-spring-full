@@ -1,6 +1,6 @@
 function getDailySalesReportUrl(){
     var baseUrl = $("meta[name=baseUrl]").attr("content")
-    return baseUrl + "/api/report";
+    return baseUrl + "/api/reports";
  }
  
  function filterSalesReport() {
@@ -13,14 +13,17 @@ function getDailySalesReportUrl(){
         },
         success: function(response) {
              displayDailySalesReport(response);
+           
         },
         error: handleAjaxError
      });
  }
  
+ var data1={};
  function displayDailySalesReport(data) {
      var $tbody = $('#daily-sales-table').find('tbody');
      $tbody.empty();
+     console.log(data);
      for(let i=data.length-1; i>=0; i--){
          var b = data[i];
          console.log(b);
@@ -31,6 +34,7 @@ function getDailySalesReportUrl(){
          + '<td class="text-right">' + b.totalRevenue.toFixed(2) + '</td>'
          + '</tr>';
          $tbody.append(row);
+
      }
  }
 
@@ -41,13 +45,7 @@ function getDailySalesReportUrl(){
       "/" +
       (date.getMonth() + 1) +
       "/" +
-      date.getFullYear() +
-      " " +
-      date.getHours() +
-      ":" +
-      date.getMinutes() +
-      ":" +
-      date.getSeconds()
+      date.getFullYear() 
     );
   }
 

@@ -24,7 +24,7 @@
                                 <fo:table-row font-size="18pt" line-height="30px" background-color="#1f6a9c" color="white" font-weight = "bold">
                                     <fo:table-cell padding-left="5pt">
                                         <fo:block>
-                                            <fo:external-graphic  src="url(file:///D:/Work Space/IncreffProjects/pos_project/apache_fop/src/main/resources/logo.png)" content-height="scale-to-fit" height="50px"  content-width="2.00in" scaling="non-uniform"/>
+                                            <!-- <fo:external-graphic  src="url(file:///D:/Work Space/IncreffProjects/pos_project/apache_fop/src/main/resources/logo.png)" content-height="scale-to-fit" height="50px"  content-width="2.00in" scaling="non-uniform"/> -->
                                         </fo:block>
                                     </fo:table-cell>
 
@@ -150,32 +150,32 @@
     </xsl:template>
     <xsl:template match="lineitem">
         <fo:table-row>
-            <fo:table-cell border="1px solid #b8b6b6" text-align="center">
+            <fo:table-cell border="1px solid #b8b6b6" text-align="center" padding-left="3pt">
                 <fo:block>
                     <xsl:value-of select="sno"/>
                 </fo:block>
             </fo:table-cell>
-            <fo:table-cell border="1px solid #b8b6b6" text-align="center">
+            <fo:table-cell border="1px solid #b8b6b6" text-align="center" padding-left="3pt">
                 <fo:block>
                     <xsl:value-of select="barcode"/>
                 </fo:block>
             </fo:table-cell>
-            <fo:table-cell border="1px solid #b8b6b6" padding-left="3pt">
+            <fo:table-cell border="1px solid #b8b6b6" text-align="center" padding-left="3pt">
                 <fo:block>
                     <xsl:value-of select="product"/>
                 </fo:block>
             </fo:table-cell>
-            <fo:table-cell border="1px solid #b8b6b6" text-align="right" padding-right="3pt">
+            <fo:table-cell border="1px solid #b8b6b6" text-align="center" padding-right="3pt">
                 <fo:block>
                     <xsl:value-of select="quantity"/>
                 </fo:block>
             </fo:table-cell>
-            <fo:table-cell border="1px solid #b8b6b6" text-align="right" padding-right="3pt">
+            <fo:table-cell border="1px solid #b8b6b6" text-align="center" padding-right="3pt">
                 <fo:block>
                     <xsl:value-of select="unitprice"/>
                 </fo:block>
             </fo:table-cell>
-            <fo:table-cell border="1px solid #b8b6b6" text-align="right" padding-right="3pt">
+            <fo:table-cell border="1px solid #b8b6b6" text-align="center" padding-right="3pt">
                 <fo:block>
                     <xsl:value-of select="amount"/>
                 </fo:block>

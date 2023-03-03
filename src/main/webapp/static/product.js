@@ -1,12 +1,17 @@
 
 function getProductUrl(){
 	var baseUrl = $("meta[name=baseUrl]").attr("content")
-	return baseUrl + "/api/product";
+	return baseUrl + "/api/products";
 }
 
 function getBrandUrl(){
 	var baseUrl = $("meta[name=baseUrl]").attr("content")
-	return baseUrl + "/api/brand";
+	return baseUrl + "/api/brands";
+}
+
+function getRole(){
+    var role = $("meta[name=role]").attr("content")
+    return role;
 }
 
 var listofbrands=[];
@@ -27,9 +32,9 @@ function getBrandList(){
 }
 
 brandCategoryData = []
- brandSet = new Set()
- categorySet = new Set()
- function getBrandCategory(){
+brandSet = new Set()
+categorySet = new Set()
+function getBrandCategory(){
       $.ajax({
             url: getBrandUrl(),
             type: 'GET',
@@ -244,7 +249,9 @@ function search(event)
 		 'Content-Type': 'application/json'
 		},
 		success: function(response) {
-			 displayProductList(response);
+			 $('.datatable').DataTable().destroy();
+			 displayProductList(response); 
+			pagination();
 		},
 		error: handleAjaxError
 	 });
@@ -254,11 +261,21 @@ function search(event)
 function addProduct(event){
 	//Set the values to update
 
-	$('#add-product-modal').modal('toggle');
 	var $form = $("#add-product-form");
 	var json = toJson($form);
 	console.log(json);
 	var url = getProductUrl();
+
+	var parsed = JSON.parse(json);
+    if (parsed.barcode === "" || parsed.name === "" || parsed.mrp === "" || parsed.brand === "" || parsed.category === "")
+        return frontendErrors("Fields are empty");
+    // if(Number.isInteger(parsed.mrp)==false)
+
+    if (parsed.mrp < 0)
+        return frontendErrors("MRP can not be negative")
+	
+	if (parsed.mrp > 1000000000)
+        return frontendErrors("MRP can not be greater than 100000000.")
 	//console.log(url);
 
 	$.ajax({
@@ -270,6 +287,7 @@ function addProduct(event){
        },	   
 	   success: function(response) {
 		    SuccessMessage("Successfully Added");
+			$('#add-product-modal').modal('toggle');
 			resetForm();
 	   		getProductList();  
 	   },
@@ -294,6 +312,19 @@ function updateProduct(event){
 	//Set the values to update
 	var $form = $("#product-edit-form");
 	var json = toJson($form);
+
+	var parsed = JSON.parse(json);
+    console.log(parsed);
+    if (parsed.barcode === "" || parsed.name === "" || parsed.mrp === "" || parsed.brand === "" || parsed.category === "")
+        return frontendErrors("Fields are empty");
+    // if(Number.isInteger(parsed.mrp)==false)
+    //     return frontendErrors("MRP is not an integer");
+
+	if (parsed.mrp < 0)
+        return frontendErrors("MRP can not be negative")
+	
+	if (parsed.mrp > 1000000000)
+        return frontendErrors("MRP can not be greater than 1000000000.")
 
 	$.ajax({
 	   url: url,
@@ -320,7 +351,9 @@ function getProductList(){
 	   url: url,
 	   type: 'GET',
 	   success: function(data) {
+		$('.datatable').DataTable().destroy();
 	   		displayProductList(data);  
+			pagination();
 	   },
 	   error: handleAjaxError
 	});
@@ -352,11 +385,16 @@ function processData(){
         ErrorMessage("Please select a file");
         return;
     }
+	if(file.name.split('.').pop()!="tsv"){
+		ErrorMessage("File format is not TSV");
+		return ;
+	}
 	readFileData(file, readFileDataCallback);
 }
 
 function readFileDataCallback(results){
 	fileData = results.data;
+	var headers = results.meta;
 	if(headers.fields.length!=5) {
         var row = {};
         row.error="Number of coloumns do not match!";
@@ -385,6 +423,7 @@ function uploadRows(){
 	updateUploadDialog();
 	//If everything processed then return
 	if(processCount==fileData.length){
+		getProductList();
 		return;
 	}
 	
@@ -425,19 +464,32 @@ function displayProductList(data){
 	// console.log(data);
 	var $tbody = $('#product-table').find('tbody');
 	$tbody.empty();
+	var cnt=0;
 	for(var i in data){
 		var e = data[i];
-		// console.log(e);
-		var buttonHtml =' <button type="button" class="btn btn-dark" onclick="displayEditProduct(' + e.id + ')">edit </button>'
-		var row = '<tr>'
-		+ '<td>' + e.id + '</td>'
-		+ '<td>' + e.barcode + '</td>'
-		+ '<td>' + e.brand + '</td>'
-		+ '<td>' + e.category + '</td>'
-		+ '<td>'  + e.name + '</td>'
-		+ '<td>'  + (e.mrp).toFixed(2) + '</td>'
-		+ '<td>' + buttonHtml + '</td>'
-		+ '</tr>';
+		cnt++;
+		if(getRole()=="supervisor"){
+		    var buttonHtml =' <button type="button" class="btn btn-dark" onclick="displayEditProduct(' + e.id + ')">Edit </button>'
+		    var row = '<tr>'
+		    + '<td>' + cnt + '</td>'
+		    + '<td>' + e.barcode + '</td>'
+		    + '<td>' + e.brand + '</td>'
+		    + '<td>' + e.category + '</td>'
+		    + '<td>'  + e.name + '</td>'
+		    + '<td>'  + (e.mrp).toFixed(2) + '</td>'
+		    + '<td>' + buttonHtml + '</td>'
+		    + '</tr>';
+		}
+		else{
+			var row = '<tr>'
+		    + '<td>' + cnt + '</td>'
+		    + '<td>' + e.barcode + '</td>'
+		    + '<td>' + e.brand + '</td>'
+		    + '<td>' + e.category + '</td>'
+		    + '<td>'  + e.name + '</td>'
+		    + '<td>'  + (e.mrp).toFixed(2) + '</td>'
+		    + '</tr>';
+		}
         $tbody.append(row);
 	}
 }
@@ -480,7 +532,8 @@ function updateUploadDialog(){
 
 function updateFileName(){
 	var $file = $('#productFile');
-	var fileName = $file.val();
+	// var fileName = $file.val();
+	var fileName = document.getElementById("productFile").files[0].name;
 	$('#productFileName').html(fileName);
 	fileData = [];
     errorData = [];
@@ -505,7 +558,9 @@ function displayProduct(data){
 }
 
 function displayProductData(){	
+	resetForm();
    $('#add-product-modal').modal('toggle');
+   
 }
 
 
@@ -522,7 +577,7 @@ function init(){
 	$('#add-product').click(displayProductData);
 	$('#inputBrand').change(brandChanged);
     $('#inputCategory').change(categoryChanged);
-    $('#ProductFile').on('change', updateFileName)
+    $('#productFile').on('change', updateFileName)
 }
 
 $(document).ready(init);

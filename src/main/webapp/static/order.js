@@ -1,6 +1,6 @@
 function getOrderUrl() {
   var baseUrl = $("meta[name=baseUrl]").attr("content");
-  return baseUrl + "/api/order";
+  return baseUrl + "/api/orders";
 }
 
 function getInventoryUrl() {
@@ -10,7 +10,7 @@ function getInventoryUrl() {
 
 function getProductUrl() {
   var baseUrl = $("meta[name=baseUrl]").attr("content");
-  return baseUrl + "/api/product";
+  return baseUrl + "/api/products";
 }
 
 function getInvoiceUrl() {
@@ -116,7 +116,9 @@ function getOrderList() {
     url: url,
     type: "GET",
     success: function (data) {
+      $('.datatable').DataTable().destroy();
       displayOrderList(data);
+      pagination();
     },
     error: handleAjaxError,
   });
@@ -183,7 +185,7 @@ function displayCreateOrderItems(orderItems, total = 0) {
                <td class="text-center">${e.sellingPrice.toFixed(2)}</td>
                <td class="text-center">
                      <button class="btn btn-dark" 
-                       title="Delete item" onclick="deleteOrderItem(\'${e.barcode}\')">
+                       title="Delete item" onclick="deleteOrderItem('${e.barcode}','${e.quantity}')">
                        ${Delete_item}
                      </button>
                </td>
@@ -200,6 +202,10 @@ function displayCreateOrderItems(orderItems, total = 0) {
 let orderItems = [];
 
 function getCurrentOrderItem() {
+
+  if(isInteger($("#inputQuantity").val())==false)
+    return frontendErrors("Quantity is not an integer");
+
   return {
     barcode: $("#inputBarcode").val(),
     sellingPrice: Number.parseFloat($("#inputSellingPrice").val()),
@@ -209,6 +215,10 @@ function getCurrentOrderItem() {
 
 function addItem(item) {
   const index = orderItems.findIndex((it) => it.barcode === item.barcode.toString());
+  console.log(item);
+
+  // if(isInteger(item.quantity)==false)
+  //   return frontendErrors("Quantity is not an integer");
 
   console.log(mapbarcodequantity[item.barcode]);
   if (index == -1) {
@@ -223,6 +233,7 @@ function addItem(item) {
       return ;
     }
     orderItems.push(item);
+    mapbarcodequantity[item.barcode]-=item.quantity;
   } 
   else if (orderItems[index].sellingPrice == item.sellingPrice) {
     if (mapbarcodequantity[item.barcode] < item.quantity) {
@@ -230,6 +241,7 @@ function addItem(item) {
       return;
     }
     orderItems[index].quantity += item.quantity;
+    mapbarcodequantity[item.barcode]-=item.quantity;
   } 
   else {
     if(mapbarcodesellingPrice[item.barcode]<item.sellingPrice){
@@ -250,9 +262,16 @@ function calculateTotalPrice() {
   return total;
 }
 
-function deleteOrderItem(barcode) {
+function deleteOrderItem(barcode,quantity) {
+
   const index = orderItems.findIndex((it) => it.barcode === barcode.toString());
+  
   if (index == -1) return;
+
+  console.log(mapbarcodequantity[barcode]);
+  mapbarcodequantity[barcode]+=quantity;
+  console.log(mapbarcodequantity[barcode]);
+
   orderItems.splice(index, 1);
   displayCreateOrderItems(orderItems, calculateTotalPrice());
 }
@@ -270,13 +289,23 @@ function addOrderItem(event) {
 function addEditOrderItem() {
   const item = getCurrentEditOrderItem();
   addItem(item);
+  console.log(item);
+  console.log("H");
   displayEditOrder(orderItems, calculateTotalPrice());
   $("#edit-order-item-form").trigger("reset");
 }
 
-function deleteEditOrderItem(barcode) {
+function deleteEditOrderItem(barcode,quantity) {
+  console.log(barcode);
   const index = orderItems.findIndex((it) => it.barcode === barcode.toString());
+  console.log(index);
+
   if (index == -1) return;
+
+  console.log(mapbarcodequantity[barcode]);
+  mapbarcodequantity[barcode]+=quantity;
+  console.log(mapbarcodequantity[barcode]);
+
   orderItems.splice(index, 1);
   displayEditOrder(orderItems, calculateTotalPrice());
 }
@@ -289,14 +318,15 @@ function displayOrderList(data) {
   for (var i=data.length-1; i>=0; i--) {
     cnt++;
     var b = data[i];
+    // console.log(b);
     // var buttonHtml = '<button onclick="deleteOrder(' + b.id + ')">delete</button>'
     var orderDateStr = convertTimeStampToDateTime(b.createdAt);
     // var totalBillAmount = calculateTotalPrice(b.orderItems);
     var buttonHtml = "";
     if (getRole() === "supervisor") {
       if (b.isInvoiceCreated == true) {
-        buttonHtml =
-          '<button type="button" class="btn btn-dark" disabled="disabled"  title="Edit"></button>';
+          buttonHtml =
+          '<button type="button" class="btn btn-dark" disabled="disabled"  title="Edit">Edit</button>';
       } else {
         buttonHtml =
           '<button type="button" class="btn btn-dark" title="Edit" onclick="displayEditOrderModal(' +
@@ -309,10 +339,21 @@ function displayOrderList(data) {
       ' <button type="button" class="btn btn-dark"  title="Details" onclick="displayOrderDetails(' +
       b.id +
       ')">Details</button>';
+
+      if (b.isInvoiceCreated == false) {
     buttonHtml +=
-      ' <button type="button" class="btn btn-dark"  title="Download Invoice" onclick="downloadInvoice(' +
+      ' <button type="button" class="btn btn-dark" id="generateInvoice" title="Generate Invoice" onclick="GenerateInvoice(' +
       b.id +
-      ')">Download Invoice</button>';
+      ')">Generate Invoice</button>'; 
+      }
+      else{
+        buttonHtml +=
+      ' <button type="button" class="btn btn-dark" id="downloadInvoice" title="Download Invoice" onclick="download(' +
+      b.id +
+      ')">Download Invoice</button>'; 
+      }
+
+    
     var row =
       "<tr>" +
       '<td class="text-center">' +
@@ -370,7 +411,7 @@ function displayEditOrder(data, total = 0) {
                    <td class="barcode text-center">${e.quantity}</td>
                    <td class="barcode text-center">${e.sellingPrice.toFixed(2)}</td>
                    <td class="text-center">
-                     <button type="button" onclick="deleteEditOrderItem('${e.barcode}')" 
+                     <button type="button" onclick="deleteEditOrderItem('${e.barcode}','${e.quantity}')" 
                           data-placement="bottom" title="Delete" class="btn btn-dark">
                           ${Delete_item}
                       </button>
@@ -441,13 +482,13 @@ function displayOrderDetailsInModal(data) {
       productName +
       "</td>" +
       '<td class="text-center">' +
-      numberWithCommas(quantity) +
+      (quantity) +
       "</td>" +
       '<td class="text-center">' +
-      numberWithCommas(sellingPrice.toFixed(2)) +
+      (sellingPrice.toFixed(2)) +
       "</td>" +
       '<td class="text-center">' +
-      numberWithCommas(totalPriceStr) +
+      (totalPriceStr) +
       "</td>" +
       "</tr>";
 
@@ -485,8 +526,12 @@ function onSellingPriceChanged(barcode) {
 }
 
 function getCurrentEditOrderItem() {
+  // console.log()
+  if(isInteger($("#inputEditQuantity").val())==false)
+    return frontendErrors("Quantity is not an integer");
   return {
     barcode: $("#inputEditBarcode").val(),
+
     quantity: Number.parseInt($("#inputEditQuantity").val()),
     sellingPrice: Number.parseFloat($("#inputEditSellingPrice").val()),
   };
@@ -502,6 +547,9 @@ function init() {
   $("#add-order-button").click(displayAddModal);
   $("#update-order").click(updateOrder);
   $("#refresh-data").click(getOrderList);
+  $('#generateInvoice').click(getOrderList);
+  $('#downloadInvoice').click(getOrderList);
+  
 }
 
 $(document).ready(init);
@@ -574,36 +622,28 @@ function disableOrderEdit(id) {
   });
 }
 
-function downloadInvoice(id) {
-  // var req = new XMLHttpRequest();
-  // req.open("GET", `/pos/download/invoice/${id}`, true);
-  // req.responseType = "blob";
-
-  // req.onload = function (event) {
-  //   var blob = req.response;
-  //   $(".notifyjs-wrapper").trigger("notify-hide");
-  //   $.notify("Invoice generated!", "success");
-  //   var link = document.createElement("a");
-  //   link.href = window.URL.createObjectURL(blob);
-  //   link.download = `invoice${id}.pdf`;
-  //   link.click();
-
-  //   disableOrderEdit(id);
-  // };
-
-  // req.send();
-
-  var url=getInvoiceUrl()+'/'+id;
+function GenerateInvoice(id) {
+  var url = getInvoiceUrl() + "/" + id;
   $.ajax({
-    url: url,
-    type: "GET",
-    success: function (response) {
-      getOrderList();
-      var url = getInvoiceUrl() + "/download/" + id;
+      url: url,
+      type: 'GET',
+      success: function () {
+          // var url2 = getInvoiceUrl()+"/download/"+id;
+          // window.location.href = url;
+          getOrderList();
 
-      window.location.href = url;
-      downloadInvoiceNow(id);
-    },
-    error: handleAjaxError,
+          // console.log("Hello")
+          // download(id);
+          // console.log("hello");
+      },
+
+      error: handleAjaxError
   });
+}
+
+function download(id) {
+  var url = getInvoiceUrl() + "/download/" + id;
+
+  window.location.href = url;
+
 }

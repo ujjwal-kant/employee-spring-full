@@ -1,7 +1,7 @@
 
 function getUrl(){
 	var baseUrl = $("meta[name=baseUrl]").attr("content")
-	return baseUrl + "/api/report/inventory";
+	return baseUrl + "/api/reports/inventory";
 }
 
 
@@ -11,7 +11,9 @@ function getReportList(){
 		url: url,
 		type: 'GET',
 		success: function(data) {
-			displayInventoryReportLis(data);  
+			console.log(data);
+			displayInventoryReportLis(data); 
+			pagination();  
 		},
 		error: function() {
 			console.log("Error");

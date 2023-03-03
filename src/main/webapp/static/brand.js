@@ -1,7 +1,6 @@
-
 function getBrandUrl(){
 	var baseUrl = $("meta[name=baseUrl]").attr("content")
-	return baseUrl + "/api/brand";
+	return baseUrl + "/api/brands";
 }
 
 function getRole(){
@@ -30,7 +29,9 @@ function search(event)
 		 'Content-Type': 'application/json'
 		},
 		success: function(response) {
-			 displayBrandList(response);
+			$('.datatable').DataTable().destroy();
+			displayBrandList(response);
+			pagination();
 		},
 		error: handleAjaxError
 	 });
@@ -41,6 +42,21 @@ function addBrand(event){
 	var json = toJson($form);
 	var url = getBrandUrl();
 
+	var parsed=JSON.parse(json);
+
+	if(parsed.brand=="")
+        return frontendErrors("Brand is Empty");
+
+	if(parsed.category=="")
+        return frontendErrors("category is Empty");
+
+	if(parsed.brand.length>30)
+	return frontendErrors("Brand cannot conatins more than 30 characters");
+
+	if(parsed.category.length>30)
+	return frontendErrors("category cannot conatins more than 30 characters");
+
+
 	$.ajax({
 	   url: url,
 	   type: 'POST',
@@ -48,12 +64,11 @@ function addBrand(event){
 	   headers: {
        	'Content-Type': 'application/json'
        },	   
-	   success: function(response) {
-	   		getBrandList();
+	   success: function(response) {	   		
 			$('#add-brand-modal').modal('toggle');  
 			resetForm();
 			SuccessMessage("Successfully Added");
-			// $.notify(JSON.parse(json).brand + " in category: "+JSON.parse(json).category + " added successfully!","success");
+			getBrandList();
 	   },
 	   error: handleAjaxError
 	});
@@ -74,6 +89,19 @@ function updateBrand(event){
 	var $form = $("#brand-edit-form");
 	var json = toJson($form);
 
+	var parsed=JSON.parse(json);
+    if(parsed.brand=="")
+        return frontendErrors("Brand is Empty");
+
+	if(parsed.category=="")
+        return frontendErrors("category is Empty");
+
+	if(parsed.brand.length>30)
+		return frontendErrors("Brand cannot conatins more than 30 characters");
+	
+		if(parsed.category.length>30)
+		return frontendErrors("category cannot conatins more than 30 characters");
+
 	$.ajax({
 	   url: url,
 	   type: 'PUT',
@@ -82,9 +110,9 @@ function updateBrand(event){
        	'Content-Type': 'application/json'
        },	   
 	   success: function(response) {
+		   $('#edit-brand-modal').modal('toggle');	
 		    SuccessMessage("Successfully Updated");
-	   		getBrandList();   
-	        $('#edit-brand-modal').modal('toggle');	
+			getBrandList();
 	   },
 	   error: handleAjaxError
 	});
@@ -94,13 +122,15 @@ function updateBrand(event){
 
 
 function getBrandList(){
-	console.log(getRole());
+	// console.log(getRole());
 	var url = getBrandUrl();
 	$.ajax({
 	   url: url,
 	   type: 'GET',
 	   success: function(data) {
+		    $('.datatable').DataTable().destroy();
 	   		displayBrandList(data);  
+			pagination();
 	   },
 	   error: handleAjaxError
 	});
@@ -127,11 +157,15 @@ var processCount = 0;
 
 function processData(){
 	var file = $('#brandCategoryFile')[0].files[0];
-	if(!file)
-    {
+	console.log(file);
+	if(!file){
         ErrorMessage("Please select a file")
         return;
     }
+	if(file.name.split('.').pop()!="tsv"){
+		ErrorMessage("File format is not TSV");
+		return ;
+	}
 	readFileData(file, readFileDataCallback);
 }
 
@@ -190,11 +224,9 @@ function uploadRows(){
 	   		uploadRows();  
 	   },
 	   error: function(response){
-		var data = JSON.parse(response.responseText);
-		row.error=data["message"];
-		   row.error_in_row_no = processCount
-		   errorData.push(row);
-		   uploadRows();
+		row.error=response.responseText
+		errorData.push(row);
+		uploadRows();
 	   }
 	});
     
@@ -207,6 +239,7 @@ function downloadErrors(){
 
 function displayBrandList(data){
 	var $tbody = $('#brand-table').find('tbody');
+	
 	listofbrands=[];
 	listofcategorys=[];
 	mapofbrands={};
@@ -231,14 +264,24 @@ function displayBrandList(data){
 
 		// console.log(e);
 		// '<button type="button" class="btn btn-outline-primary" onclick="deleteBrand(' + e.id + ')">delete</button>'
-		var buttonHtml = ' <button type="button" class="btn btn-dark" onclick="displayEditBrand(' + e.id + ')">edit</button>'
-		var row = '<tr>'
-		// + '<td>' + e.id + '</td>'
-		+ '<td>' + e.brand + '</td>'
-		+ '<td>'  + e.category + '</td>'
-		+ '<td>' + buttonHtml + '</td>'
-		+ '</tr>';
-        $tbody.append(row);
+		if(getRole()==="supervisor"){
+		    var buttonHtml = ' <button type="button" class="btn btn-dark" onclick="displayEditBrand(' + e.id + ')">Edit</button>'
+		    var row = '<tr>'
+		    // + '<td>' + e.id + '</td>'
+		    + '<td>' + e.brand + '</td>'
+		    + '<td>'  + e.category + '</td>'
+		    + '<td>' + buttonHtml + '</td>'
+		    + '</tr>';
+		}
+		else{
+			var row = '<tr>'
+		    // + '<td>' + e.id + '</td>'
+		    + '<td>' + e.brand + '</td>'
+		    + '<td>'  + e.category + '</td>'
+		    + '</tr>';
+		}
+            $tbody.append(row);
+		
 	}
 }
 
@@ -277,7 +320,10 @@ function updateUploadDialog(){
 
 function updateFileName(){
 	var $file = $('#brandCategoryFile');
-	var fileName = $file.val();
+	// var fileName = $file.val();
+	// console.log($file.val());
+	var fileName = document.getElementById("brandCategoryFile").files[0].name;
+	console.log("hello");
 	$('#brandCategoryFileName').html(fileName);
 	fileData = [];
     errorData = [];
@@ -325,7 +371,7 @@ function init(){
 	$('#add-brand').click(displayAddData);
 	$('#process-data').click(processData);
 	$('#download-errors').click(downloadErrors);
-    $('#BrandFile').on('change', updateFileName)
+    $('#brandFile').on('change', updateFileName)
 	
 }
 

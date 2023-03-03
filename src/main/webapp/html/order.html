@@ -47,7 +47,8 @@
                 <div class="col form-group">
 					<label for="inputSellingPrice" class="col-form-label">Selling Price</label>
 					<div class="">
-					<input type="number" class="form-control" name="sellingPrice" min="0" step="0.01" id="inputSellingPrice" val="" placeholder="Enter selling price" required />
+					<input type="number" class="form-control" name="sellingPrice" min="0"  id="inputSellingPrice" val="" step="0.01" placeholder="Enter selling price" required />
+					<!-- step="0.01" -->
 					</div>
 				</div>
                 <div class="align-self-center mt-3 pt-1">
@@ -62,7 +63,7 @@
                     <table class="table table-striped css-serial" id="order-item-table">
                         <thead>
                           <tr>
-                            <th class="text-center" scope="col">S. No</th>
+                            <th class="text-center" scope="col">S.No</th>
                             <th class="text-center" scope="col">Barcode</th>
                             <th class="text-center" scope="col">Quantity</th>
                             <th class="text-center" scope="col">Selling Price</th>
@@ -96,12 +97,12 @@
 
  <!-- Table -->
  <div class="col-12">
-	<table class="table table-bordered table-striped" id="order-table">
+	<table class="table table-bordered table-striped datatable" id="order-table">
 	  <thead class="thead-dark">
 	    <tr>
-	      <th class="text-center" scope="col">S. No</th>
-	      <th class="text-center" scope="col">Order Time</th>
-		  <th class="text-center" scope="col">Total Amount</th>
+	      <th class="text-center" style="width:10%" scope="col">S. No</th>
+	      <th class="text-center" style="width:20%" scope="col">Order Time</th>
+		  <th class="text-center" style="width:20%" scope="col">Total Amount</th>
 		  <th class="text-center" scope="col">Actions</th>
 	    </tr>
 	  </thead>
@@ -129,10 +130,10 @@
 						<strong>Order ID:</strong>
 						<p id="order-id"></p>
 					</div>
-					<!-- <div>
+					<div>
 						<strong>Order Time:</strong>
 						<p id="order-date"></p>
-					</div> -->
+					</div>
 				</div>
 				<div class="d-flex justify-content-center">
 					<h4>Order Items</h4>

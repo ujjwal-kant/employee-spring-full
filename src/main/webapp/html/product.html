@@ -16,27 +16,6 @@
  <!-- Top row with form-->
  <div class="row">
 	<div class="col-12">
-		<!-- <form class="form-inline" id="search-form">
-		<div class="form-group col-4">
-		<label for="inputName" class="col-sm-2 col-form-label">&nbsp;&nbsp;&nbsp;&nbsp;Product</label>
-		 <input type="text" class="form-control" name="name" id="inputName" placeholder="Enter Product Name">
-	  </div>
-	  
-	
-	  <div class="form-group col-4">
-		<label for="inputBarcode" class="col-sm-2 col-form-label">&nbsp;&nbsp;&nbsp;&nbsp;Barcode</label>
-		  <input type="text" class="form-control" name="barcode" id="inputBarcode" placeholder="Enter Product Barcode">
-	  </div>
-	  </form> -->
-	  <!-- &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; -->
-	  <!-- <div class="form-group col-4" style=" padding-left: 104px;">
-		<label class="col-sm-12 col-form-label" style="color:white">g</label>
-	  <button type="button" class="btn btn-outline-primary" id="search-by-name-barcode">Search</button>
-	  &nbsp;
-	  <button type="button" class="btn btn-outline-primary" id="add-product">Create</button>
-	  &nbsp;
-	  <button type="button" class="btn btn-outline-primary" id="upload-data">Upload</button>
-	 </div> -->
 	 <form id="search-form">
 		<div class="row">
 		   <div class="form-group col-md-4">
@@ -51,9 +30,9 @@
 				<div class="ml-auto">
 				<button type="button" class="btn btn-dark" id="search-by-name-barcode">Search</button>
 				&nbsp;
-				<button type="button" class="btn btn-dark" id="add-product">Create</button>
+				<button type="button" class="btn btn-dark" id="add-product" th:if="${info.getRole() == 'supervisor'}">Create</button>
 				&nbsp;
-				<button type="button" class="btn btn-dark" id="upload-data">Upload</button>
+				<button type="button" class="btn btn-dark" id="upload-data" th:if="${info.getRole() == 'supervisor'}">Upload</button>
 			    </div>
 			</div>
 		</div>
@@ -70,16 +49,16 @@
 
  <!-- Table -->
  <div class="col-12">
-	<table class="table table-bordered table-striped" id="product-table">
+	<table class="table table-bordered table-striped datatable" id="product-table">
 	  <thead class="thead-dark">
 	    <tr class="text-center">
-	      <th scope="col">ID</th>
+	      <th scope="col">S.No</th>
 	      <th scope="col">Barcode</th>
 	      <th scope="col">Brand </th>
 		  <th scope="col">Category </th>
 	      <th scope="col">Name</th>
 	      <th scope="col">MRP</th>
-	      <th scope="col">Actions</th>
+	      <th scope="col" th:if="${info.getRole() == 'supervisor'}">Actions</th>
 	    </tr>
 	  </thead>
 	  <tbody class="text-center">
@@ -122,13 +101,13 @@
 			  <div class="form-group" style="margin-bottom:20px;">
 			    <label for="inputName" class="col-sm-2 col-form-label">Name</label>
 			    <div class="col-sm-12">
-			      <input type="text" class="form-control" name="name" placeholder="enter name">
+			      <input type="text" class="form-control" name="name" placeholder="enter name" required maxlength="30">
 			    </div>
 			  </div>
 			  <div class="form-group" style="margin-bottom:20px;">
 			    <label for="inputMrp" class="col-sm-2 col-form-label">MRP</label>
 			    <div class="col-sm-12">
-			      <input type="number" class="form-control" name="mrp" placeholder="enter mrp">
+			      <input type="number" class="form-control" name="mrp" placeholder="enter mrp" required min="0" max="100000000">
 			    </div>
 			  </div>
  	           <input type="hidden" name="id" >
@@ -143,7 +122,7 @@
 </div>
 
 <!-- Product Add Modal -->
-  <div class="modal" data-backdrop="static" data-keyboard="false" id="add-product-modal" role="dialog" tabindex="-1">
+  <div class="modal" tabindex="-1" role="dialog" id="add-product-modal">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
@@ -155,7 +134,7 @@
                         <label class="required col-sm-2-random col-form-label-random"
                                for="inputBarcode">&nbsp;&nbsp;<b>Barcode</b>&nbsp;&nbsp;</label>
                         <div class="col-sm-12">
-                            <input class="form-control" id="inputName" name="barcode" placeholder="Enter Barcode"
+                            <input class="form-control" id="inputName" name="barcode" placeholder="Enter Barcode" required maxlength="20"
                                    type="text">
                         </div>
                     </div>
@@ -169,11 +148,6 @@
 								<option selected="" value="">Select Brand</option>
 							</select>
                         </div>
- 
-						<!-- <select name="brand" id="brand" onchange="jsFunction();">
-							<option id="option_brand" value="None">Choose a brand</option>
-						</select>
-						<label for="category">Cateogry:</label> -->
                     </div>
 
                     <div class="form-group">
@@ -191,7 +165,7 @@
                                for="inputName">&nbsp;&nbsp;<b>Product
                             Name</b>&nbsp;&nbsp;</label>
                         <div class="col-sm-12">
-                            <input class="form-control" id="inputName" name="name" placeholder="Enter Product name" type="text">
+                            <input class="form-control" id="inputName" name="name" placeholder="Enter Product name" type="text" required maxlength="20">
                         </div>
                     </div>
 
@@ -200,14 +174,14 @@
                                for="inputMrp">&nbsp;<b>&nbsp;&nbsp;MRP</b></label>
                         <div class="col-sm-12">
                             <input class="form-control" id="inputMrp" name="mrp" placeholder="Enter MRP"
-                                   type="number">
+                                   type="number" required min="0" max="100000000">
                         </div>
                     </div>
                 </form>
             </div>
             <div class="modal-footer">
-				<button type="button" class="btn btn-dark" data-dismiss="modal">Cancel</button>
-                <button class="btn btn-dark" id="add-product-1" type="button">Submit</button>
+				<button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                <button class="btn btn-primary" id="add-product-1" type="button">Submit</button>
             </div>
         </div>
     </div>
